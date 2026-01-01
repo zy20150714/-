@@ -5,8 +5,8 @@ const BeatDisplay: React.FC = () => {
   const { state } = useMetronome();
   const [flash, setFlash] = useState(false);
   const [isFirstBeatVisible, setIsFirstBeatVisible] = useState(true);
-  const flashTimerRef = useRef<number | null>(null);
-  const visibilityTimerRef = useRef<number | null>(null);
+  const flashTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const visibilityTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const getBeatType = useCallback((beatNumber: number): 'first' | 'normal' => {
     return beatNumber === 1 ? 'first' : 'normal';
