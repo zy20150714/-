@@ -2,9 +2,11 @@ import React from 'react';
 import { useMetronome } from '../../contexts/MetronomeContext';
 import { getSoundTypeEmoji } from '../../utils/metronomeUtils';
 import { audioUtils } from '../../utils/audioUtils';
+import { useSystemSettings } from '../ControlPanel/SystemSettings';
 
 const SoundSelector: React.FC = () => {
   const { state, dispatch } = useMetronome();
+  const { settings } = useSystemSettings();
   
   const handleSoundTypeChange = (soundType: string) => {
     dispatch({ type: 'SET_SOUND_TYPE', payload: soundType as any });
@@ -33,8 +35,8 @@ const SoundSelector: React.FC = () => {
   ];
   
   return (
-    <div className="bg-white rounded-xl shadow-md p-4 mb-6">
-      <h3 className="text-lg font-semibold text-gray-800 mb-3">声音类型</h3>
+    <div className={`rounded-xl shadow-md p-4 mb-6 ${settings.darkMode ? 'bg-gray-800' : 'bg-white'}`}>
+      <h3 className={`text-lg font-semibold mb-3 ${settings.darkMode ? 'text-gray-100' : 'text-gray-800'}`}>声音类型</h3>
       
       {/* 声音类型选择 */}
       <div className="grid grid-cols-5 gap-2 mb-4">
@@ -42,7 +44,7 @@ const SoundSelector: React.FC = () => {
           <button
             key={sound.value}
             onClick={() => handleSoundTypeChange(sound.value)}
-            className={`py-2 rounded-lg font-semibold transition-all duration-200 flex flex-col items-center ${state.soundType === sound.value ? 'bg-blue-600 text-white shadow-md scale-105' : 'bg-gray-100 text-gray-800 hover:bg-gray-200'}`}
+            className={`py-2 rounded-lg font-semibold transition-all duration-200 flex flex-col items-center ${state.soundType === sound.value ? 'bg-blue-600 text-white shadow-md scale-105' : settings.darkMode ? 'bg-gray-700 text-gray-100 hover:bg-gray-600' : 'bg-gray-100 text-gray-800 hover:bg-gray-200'}`}
           >
             <span className="text-2xl mb-1">{getSoundTypeEmoji(sound.value)}</span>
             <span className="text-xs">{sound.label}</span>
@@ -69,26 +71,26 @@ const SoundSelector: React.FC = () => {
       {/* 音量调节 */}
       <div className="space-y-3">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">重音音量: {state.volume.accent}%</label>
+          <label className={`block text-sm font-medium mb-1 ${settings.darkMode ? 'text-gray-300' : 'text-gray-700'}`}>重音音量: {state.volume.accent}%</label>
           <input
             type="range"
             min="0"
             max="100"
             value={state.volume.accent}
             onChange={(e) => handleVolumeChange('accent', parseInt(e.target.value))}
-            className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+            className={`w-full h-2 rounded-lg appearance-none cursor-pointer ${settings.darkMode ? 'bg-gray-700' : 'bg-gray-200'}`}
           />
         </div>
         
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">普通音音量: {state.volume.normal}%</label>
+          <label className={`block text-sm font-medium mb-1 ${settings.darkMode ? 'text-gray-300' : 'text-gray-700'}`}>普通音音量: {state.volume.normal}%</label>
           <input
             type="range"
             min="0"
             max="100"
             value={state.volume.normal}
             onChange={(e) => handleVolumeChange('normal', parseInt(e.target.value))}
-            className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+            className={`w-full h-2 rounded-lg appearance-none cursor-pointer ${settings.darkMode ? 'bg-gray-700' : 'bg-gray-200'}`}
           />
         </div>
       </div>

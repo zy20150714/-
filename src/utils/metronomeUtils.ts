@@ -26,7 +26,7 @@ export const calculateSubdivisionDuration = (beatDuration: number, subdivision: 
 export const validateBPM = (bpm: number): number => {
   if (bpm < 40) return 40;
   if (bpm > 208) return 208;
-  return Math.round(bpm);
+  return bpm; // 只在超出范围时调整，否则保持原样
 };
 
 export const validateSubdivision = (subdivision: number): number => {
