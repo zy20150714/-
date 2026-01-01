@@ -105,12 +105,12 @@ const InteractiveControlPanel: React.FC = () => {
         {/* 时值调节 */}
         <div>
           <div className={`text-sm mb-2 ${settings.darkMode ? 'text-gray-300' : 'text-gray-600'}`}>时值</div>
-          <div className="flex gap-3">
+          <div className="flex overflow-x-auto gap-3 pb-2 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-transparent">
             {noteValueOptions.map((nv) => (
               <button
                 key={`nv-${nv}`}
                 onClick={() => handleNoteValueChange(nv)}
-                className={`px-6 py-3 rounded-lg transition-all ${state.noteValue === nv ? 'bg-cyan-500 text-white' : settings.darkMode ? 'bg-gray-700 text-gray-100 hover:bg-cyan-900' : 'bg-white text-gray-800 hover:bg-cyan-100'}`}
+                className={`px-6 py-3 rounded-lg transition-all flex-shrink-0 ${state.noteValue === nv ? 'bg-cyan-500 text-white' : settings.darkMode ? 'bg-gray-700 text-gray-100 hover:bg-cyan-900' : 'bg-white text-gray-800 hover:bg-cyan-100'}`}
               >
                 <div className="text-3xl">{getNoteValueSymbol(nv)}</div>
               </button>

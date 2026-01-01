@@ -68,12 +68,12 @@ class AudioUtils {
 
   public playSecondary(soundType: SoundType, volume: number): void {
     const config = this.soundConfigs[soundType];
-    this.playTone(config.secondaryFrequency, volume * 0.7, config.duration * 0.8, 'sine');
+    this.playTone(config.secondaryFrequency, volume * 0.9, config.duration * 0.8, 'sine');
   }
 
   public playNormal(soundType: SoundType, volume: number): void {
     const config = this.soundConfigs[soundType];
-    this.playTone(config.normalFrequency, volume * 0.6, config.duration * 0.7, 'sine');
+    this.playTone(config.normalFrequency, volume * 0.8, config.duration * 0.7, 'sine');
   }
 
   public playSound(soundType: SoundType, isAccent: boolean, isSecondary: boolean, volume: number): void {
