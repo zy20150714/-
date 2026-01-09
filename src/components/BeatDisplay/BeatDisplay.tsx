@@ -30,11 +30,14 @@ const BeatDisplay: React.FC = () => {
       // 如果是第一拍，在声音播放完毕后熄灭
       if (state.currentBeat === 1) {
         setIsFirstBeatVisible(true);
-        // 计算节拍持续时间，用于确定何时熄灭第一拍
+        // 计算节拍持续时间，考虑细分拍
         const beatDuration = 60000 / state.bpm;
+        const subdivisionDuration = beatDuration / state.subdivision;
+        
+        // 使用细分拍持续时间，确保在每个细分拍结束后正确控制光标可见性
         visibilityTimerRef.current = setTimeout(() => {
           setIsFirstBeatVisible(false);
-        }, beatDuration);
+        }, subdivisionDuration);
       } else {
         setIsFirstBeatVisible(true);
       }

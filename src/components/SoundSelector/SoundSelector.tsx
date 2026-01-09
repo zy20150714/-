@@ -17,12 +17,12 @@ const SoundSelector: React.FC = () => {
   };
   
   const handlePreviewAccent = () => {
-    // 预览重音即预览首拍声音
+    // 预览首拍音
     audioUtils.playAccent(state.soundType, state.volume.accent);
   };
   
   const handlePreviewNormal = () => {
-    // 预览普通拍声音
+    // 预览普通拍音
     audioUtils.playNormal(state.soundType, state.volume.normal);
   };
   
@@ -58,13 +58,13 @@ const SoundSelector: React.FC = () => {
           onClick={handlePreviewAccent}
           className="flex-1 py-2 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 active:scale-95 transition-all"
         >
-          预览重音
+          预览首拍音
         </button>
         <button
           onClick={handlePreviewNormal}
           className="flex-1 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 active:scale-95 transition-all"
         >
-          预览普通音
+          预览普通拍音
         </button>
       </div>
       

@@ -43,9 +43,13 @@ export const useMetronomePlayback = () => {
     const subdivisionDuration = beatDuration / state.subdivision;
     
     // 设置timeout，等待当前节拍播放完毕后更新状态
+    // 使用当前函数作用域中的state值，确保更新逻辑正确
+    const currentSubdivision = state.currentSubdivision;
+    const currentMaxSubdivision = state.subdivision;
+    
     timeoutRef.current = setTimeout(() => {
       // 更新状态
-      if (state.currentSubdivision < state.subdivision) {
+      if (currentSubdivision < currentMaxSubdivision) {
         dispatch({ type: 'NEXT_SUBDIVISION' });
       } else {
         dispatch({ type: 'NEXT_BEAT' });

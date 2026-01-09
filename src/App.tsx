@@ -7,6 +7,7 @@ import InteractiveControlPanel from './components/ControlPanel/InteractiveContro
 import SystemSettings from './components/ControlPanel/SystemSettings';
 import { SystemSettingsProvider, useSystemSettings } from './components/ControlPanel/SystemSettings';
 import SoundSelector from './components/SoundSelector/SoundSelector';
+import About from './components/About/About';
 
 const SETTINGS_KEY = 'metronome-settings';
 
@@ -36,6 +37,9 @@ const MainPage: React.FC = () => {
   const { settings } = useSystemSettings();
   const [showSettings, setShowSettings] = useState(false);
   const [showSystemSettings, setShowSystemSettings] = useState(false);
+  const [showAbout, setShowAbout] = useState(false);
+  const [backButtonAlert, setBackButtonAlert] = useState(false);
+  const [lastBackPressed, setLastBackPressed] = useState(0);
 
   // 加载设置 - 自动加载
   useEffect(() => {
@@ -64,23 +68,88 @@ const MainPage: React.FC = () => {
     });
   }, [state]);
 
+  // 处理返回键事件
+  useEffect(() => {
+    const handleBackButton = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' || event.key === 'Backspace') { // 使用Backspace作为返回键替代
+        event.preventDefault();
+        
+        // 如果不是主界面，优先返回上级界面
+        if (showAbout || showSystemSettings || showSettings) {
+          if (showAbout) {
+            setShowAbout(false);
+          } else if (showSystemSettings) {
+            setShowSystemSettings(false);
+          } else if (showSettings) {
+            setShowSettings(false);
+          }
+          return;
+        }
+
+        // 如果在主界面，处理退出逻辑
+        const currentTime = Date.now();
+        if (currentTime - lastBackPressed < 2000) { // 2秒内连续按下返回键
+          // 这里可以调用退出应用的方法，但浏览器环境无法直接退出
+          // 所以我们只是清除警告
+          setBackButtonAlert(false);
+        } else {
+          // 显示提示信息
+          setBackButtonAlert(true);
+          setLastBackPressed(currentTime);
+          // 2秒后自动隐藏提示
+          setTimeout(() => {
+            setBackButtonAlert(false);
+          }, 2000);
+        }
+      }
+    };
+
+    // 添加键盘事件监听器
+    window.addEventListener('keydown', handleBackButton);
+
+    // 清理函数
+    return () => {
+      window.removeEventListener('keydown', handleBackButton);
+    };
+  }, [showSettings, showSystemSettings, showAbout, lastBackPressed]);
+
+  // 关于页面
+  if (showAbout) {
+    return (
+      <div className="animate-fadeIn">
+        <About onBack={() => setShowAbout(false)} />
+      </div>
+    );
+  }
+  
   // 系统设置页面
   if (showSystemSettings) {
     return (
-      <SystemSettings onBack={() => setShowSystemSettings(false)} />
+      <div className="animate-fadeIn">
+        <SystemSettings onBack={() => setShowSystemSettings(false)} />
+      </div>
     );
   }
   
   // 参数设置页面
   if (showSettings) {
     return (
-      <SettingsPage onBack={() => setShowSettings(false)} />
+      <div className="animate-fadeIn">
+        <SettingsPage onBack={() => setShowSettings(false)} />
+      </div>
     );
   }
 
   return (
     <div className={`min-h-screen ${settings.darkMode ? 'bg-gray-900 text-white' : 'bg-white text-gray-800'} p-4`}>
       <div className="max-w-md mx-auto">
+        {/* 返回键提示 */}
+        {backButtonAlert && (
+          <div className={`fixed top-4 left-1/2 transform -translate-x-1/2 px-4 py-2 rounded-lg shadow-lg z-50 ${settings.darkMode ? 'bg-gray-700 text-white' : 'bg-gray-200 text-gray-800'}`}>
+            <p>请连续快速两次返回即可退出</p>
+          </div>
+        )}
+        
         {/* 应用标题 */}
         <div className="text-center mb-6">
           <h1 className="text-3xl font-bold text-blue-600">节拍器</h1>
@@ -109,9 +178,9 @@ const MainPage: React.FC = () => {
           系统设置
         </button>
         
-        {/* 页脚 */}
+        {/* 页尾 */}
         <div className={`text-center text-xs mt-8 mb-4 ${settings.darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-          <p>© 2024 节拍器应用</p>
+          <p>© 2026 节拍器应用</p>
         </div>
       </div>
     </div>
@@ -143,9 +212,9 @@ const SettingsPage: React.FC<{ onBack: () => void }> = ({ onBack }) => {
         {/* 声音设置 */}
         <SoundSelector />
         
-        {/* 页脚 */}
+        {/* 页尾 */}
         <div className={`text-center text-xs mt-8 mb-4 ${settings.darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-          <p>© 2024 节拍器应用</p>
+          <p>© 2026 节拍器应用</p>
         </div>
       </div>
     </div>

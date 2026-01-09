@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import About from '../About/About';
 
 // 系统设置类型定义
 interface SystemSettings {
@@ -54,6 +55,7 @@ export const useSystemSettings = () => {
 const SystemSettings: React.FC<{ onBack: () => void }> = ({ onBack }) => {
   const { settings, updateSettings } = useSystemSettings();
   const [showTutorial, setShowTutorial] = useState(false);
+  const [showAbout, setShowAbout] = useState(false);
 
   // 教程步骤
   const tutorialSteps = [
@@ -156,6 +158,9 @@ const SystemSettings: React.FC<{ onBack: () => void }> = ({ onBack }) => {
               关闭乐理知识
             </button>
           </div>
+        ) : showAbout ? (
+          /* 关于页面 */
+          <About onBack={() => setShowAbout(false)} />
         ) : (
           /* 系统设置选项 */
           <div className="space-y-6">
@@ -198,12 +203,23 @@ const SystemSettings: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                 <span className="text-lg font-semibold">乐理知识学习</span>
               </div>
             </button>
+
+            {/* 关于按钮 */}
+            <button
+              onClick={() => setShowAbout(true)}
+              className={`w-full py-3 rounded-xl shadow-md hover:bg-gray-50 active:bg-gray-100 transition-colors ${settings.darkMode ? 'bg-gray-800 text-gray-200 hover:bg-gray-700 active:bg-gray-600' : 'bg-white text-gray-800'}`}
+            >
+              <div className="flex items-center justify-center gap-2">
+                <span className="text-lg">ℹ️</span>
+                <span className="text-lg font-semibold">关于</span>
+              </div>
+            </button>
           </div>
         )}
 
         {/* 页脚 */}
         <div className={`text-center text-xs mt-8 mb-4 ${settings.darkMode ? 'text-gray-500' : 'text-gray-500'}`}>
-          <p>© 2024 节拍器应用</p>
+          <p>© 2026 节拍器应用</p>
         </div>
       </div>
     </div>
