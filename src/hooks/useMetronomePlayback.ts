@@ -46,8 +46,6 @@ export const useMetronomePlayback = () => {
     // 使用当前函数作用域中的state值，确保更新逻辑正确
     const currentSubdivision = state.currentSubdivision;
     const currentMaxSubdivision = state.subdivision;
-    const currentBeat = state.currentBeat;
-    const [beats] = state.timeSignature.split('/').map(Number);
     
     timeoutRef.current = setTimeout(() => {
       // 更新状态
