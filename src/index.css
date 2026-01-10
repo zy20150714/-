@@ -52,3 +52,186 @@ button:active {
   transform: scale(0.98);
   transition: transform 0.1s;
 }
+
+/* 自定义动画效果 */
+@layer utilities {
+  /* 淡入动画 */
+  .animate-fadeIn {
+    animation: fadeIn 0.2s ease-out;
+    will-change: opacity;
+    transform: translateZ(0);
+  }
+
+  /* 淡入淡出动画 */
+  .animate-fadeInOut {
+    animation: fadeInOut 0.4s ease-in-out;
+    will-change: opacity;
+    transform: translateZ(0);
+  }
+
+  /* 滑入动画 */
+  .animate-slideIn {
+    animation: slideIn 0.2s ease-out;
+    will-change: transform, opacity;
+    transform: translateZ(0);
+  }
+
+  /* 滑入滑出动画 */
+  .animate-slideInOut {
+    animation: slideInOut 0.4s ease-in-out;
+    will-change: transform, opacity;
+    transform: translateZ(0);
+  }
+
+  /* 弹跳动画 */
+  .animate-bounceSoft {
+    animation: bounceSoft 0.4s ease-out;
+    will-change: transform;
+    transform: translateZ(0);
+  }
+
+  /* 缩放动画 */
+  .animate-scale {
+    animation: scale 0.2s ease-out;
+    will-change: transform, opacity;
+    transform: translateZ(0);
+  }
+
+  /* 旋转动画 */
+  .animate-rotate {
+    animation: rotate 0.4s ease-out;
+    will-change: transform;
+    transform: translateZ(0);
+  }
+
+  /* 脉冲动画 */
+  .animate-pulseSoft {
+    animation: pulseSoft 0.8s infinite ease-in-out;
+    will-change: opacity;
+    transform: translateZ(0);
+  }
+
+  /* 悬浮效果 */
+  .hover-lift {
+    transition: transform 0.15s ease-out, box-shadow 0.15s ease-out;
+    will-change: transform, box-shadow;
+    transform: translateZ(0);
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-2px) translateZ(0);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  /* 按钮点击波纹效果 */
+  .ripple {
+    position: relative;
+    overflow: hidden;
+    transform: translateZ(0);
+  }
+
+  .ripple::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    transform: translate(-50%, -50%) translateZ(0);
+    transition: width 0.4s ease-out, height 0.4s ease-out;
+    will-change: width, height;
+  }
+
+  .ripple:active::after {
+    width: 300px;
+    height: 300px;
+  }
+}
+
+/* 动画关键帧 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-15px) translateZ(0);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) translateZ(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInOut {
+  0% {
+    transform: translateY(-15px) translateZ(0);
+    opacity: 0;
+  }
+  50% {
+    transform: translateY(0) translateZ(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(15px) translateZ(0);
+    opacity: 0;
+  }
+}
+
+@keyframes bounceSoft {
+  0%, 100% {
+    transform: translateY(0) translateZ(0);
+  }
+  50% {
+    transform: translateY(-8px) translateZ(0);
+  }
+}
+
+@keyframes scale {
+  0% {
+    transform: scale(0.95) translateZ(0);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1) translateZ(0);
+    opacity: 1;
+  }
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg) translateZ(0);
+  }
+  to {
+    transform: rotate(360deg) translateZ(0);
+  }
+}
+
+@keyframes pulseSoft {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}

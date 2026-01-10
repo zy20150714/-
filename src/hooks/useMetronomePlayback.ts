@@ -6,7 +6,7 @@ import { audioUtils } from '../utils/audioUtils';
 export const useMetronomePlayback = () => {
   const { state, dispatch } = useMetronome();
   const timeoutRef = useRef<number | null>(null);
-  const isPlayingRef = useRef(false);
+  const wasPlayingRef = useRef(false);
   
   // 清除当前所有timeout
   const clearAllTimeouts = () => {
@@ -46,6 +46,8 @@ export const useMetronomePlayback = () => {
     // 使用当前函数作用域中的state值，确保更新逻辑正确
     const currentSubdivision = state.currentSubdivision;
     const currentMaxSubdivision = state.subdivision;
+    const currentBeat = state.currentBeat;
+    const [beats] = state.timeSignature.split('/').map(Number);
     
     timeoutRef.current = setTimeout(() => {
       // 更新状态
@@ -57,23 +59,23 @@ export const useMetronomePlayback = () => {
     }, subdivisionDuration) as unknown as number;
   };
   
-  // 当节拍状态变化时，播放当前节拍的声音
-  useEffect(() => {
-    if (state.isPlaying && isPlayingRef.current) {
-      playBeat();
-    }
-  }, [state.currentBeat, state.currentSubdivision, state.isPlaying, state.bpm, state.noteValue, state.subdivision, state.soundType, state.volume, dispatch]);
-  
-  // 只有当isPlaying状态变化时，才会设置或清除播放循环
+  // 统一的播放控制逻辑
   useEffect(() => {
     if (state.isPlaying) {
-      // 开始播放时，设置isPlayingRef为true，然后播放第一个节拍
-      isPlayingRef.current = true;
+      // 开始播放时，播放第一个节拍
       playBeat();
+      wasPlayingRef.current = true;
     } else {
       // 停止播放时，清除所有timeout
       clearAllTimeouts();
-      isPlayingRef.current = false;
+      wasPlayingRef.current = false;
     }
-  }, [state.isPlaying]);
+  }, [state.isPlaying, state.timeSignature]);
+  
+  // 当节拍状态变化时，播放当前节拍的声音（仅在播放状态下且不是刚开始播放时）
+  useEffect(() => {
+    if (state.isPlaying && wasPlayingRef.current) {
+      playBeat();
+    }
+  }, [state.currentBeat, state.currentSubdivision, state.bpm, state.noteValue, state.subdivision, state.soundType, state.volume, dispatch]);
 };

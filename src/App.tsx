@@ -116,7 +116,7 @@ const MainPage: React.FC = () => {
   // 关于页面
   if (showAbout) {
     return (
-      <div className="animate-fadeIn">
+      <div className="animate-slideIn">
         <About onBack={() => setShowAbout(false)} />
       </div>
     );
@@ -125,7 +125,7 @@ const MainPage: React.FC = () => {
   // 系统设置页面
   if (showSystemSettings) {
     return (
-      <div className="animate-fadeIn">
+      <div className="animate-slideIn">
         <SystemSettings onBack={() => setShowSystemSettings(false)} />
       </div>
     );
@@ -134,24 +134,24 @@ const MainPage: React.FC = () => {
   // 参数设置页面
   if (showSettings) {
     return (
-      <div className="animate-fadeIn">
+      <div className="animate-slideIn">
         <SettingsPage onBack={() => setShowSettings(false)} />
       </div>
     );
   }
 
   return (
-    <div className={`min-h-screen ${settings.darkMode ? 'bg-gray-900 text-white' : 'bg-white text-gray-800'} p-4`}>
+    <div className={`min-h-screen ${settings.darkMode ? 'bg-gray-900 text-white' : 'bg-white text-gray-800'} p-4 animate-fadeIn`}>
       <div className="max-w-md mx-auto">
         {/* 返回键提示 */}
         {backButtonAlert && (
-          <div className={`fixed top-4 left-1/2 transform -translate-x-1/2 px-4 py-2 rounded-lg shadow-lg z-50 ${settings.darkMode ? 'bg-gray-700 text-white' : 'bg-gray-200 text-gray-800'}`}>
+          <div className={`fixed top-4 left-1/2 transform -translate-x-1/2 px-4 py-2 rounded-lg shadow-lg z-50 ${settings.darkMode ? 'bg-gray-700 text-white' : 'bg-gray-200 text-gray-800'} animate-fadeIn`}>
             <p>请连续快速两次返回即可退出</p>
           </div>
         )}
         
         {/* 应用标题 */}
-        <div className="text-center mb-6">
+        <div className="text-center mb-6 animate-bounceSoft">
           <h1 className="text-3xl font-bold text-blue-600">节拍器</h1>
           <p className={`mt-1 ${settings.darkMode ? 'text-gray-300' : 'text-gray-600'}`}>专业的节拍辅助工具</p>
         </div>
@@ -165,7 +165,7 @@ const MainPage: React.FC = () => {
         {/* 参数设置按钮 */}
         <button
           onClick={() => setShowSettings(true)}
-          className="w-full py-4 bg-blue-500 text-white font-semibold rounded-lg shadow-md mb-4 active:bg-blue-600"
+          className="w-full py-4 bg-blue-500 text-white font-semibold rounded-lg shadow-md mb-4 hover-lift ripple"
         >
           参数设置
         </button>
@@ -173,7 +173,7 @@ const MainPage: React.FC = () => {
         {/* 系统设置按钮 */}
         <button
           onClick={() => setShowSystemSettings(true)}
-          className={`w-full py-4 font-semibold rounded-lg shadow-md mb-6 ${settings.darkMode ? 'bg-gray-800 text-gray-200 active:bg-gray-700' : 'bg-gray-200 text-gray-800 active:bg-gray-300'}`}
+          className={`w-full py-4 font-semibold rounded-lg shadow-md mb-6 hover-lift ripple ${settings.darkMode ? 'bg-gray-800 text-gray-200' : 'bg-gray-200 text-gray-800'}`}
         >
           系统设置
         </button>
@@ -191,18 +191,18 @@ const SettingsPage: React.FC<{ onBack: () => void }> = ({ onBack }) => {
   const { settings } = useSystemSettings();
   
   return (
-    <div className={`min-h-screen ${settings.darkMode ? 'bg-gray-900 text-white' : 'bg-white text-gray-800'} p-4`}>
+    <div className={`min-h-screen ${settings.darkMode ? 'bg-gray-900 text-white' : 'bg-white text-gray-800'} p-4 animate-fadeIn`}>
       <div className="max-w-md mx-auto">
         {/* 返回按钮 */}
         <button
           onClick={onBack}
-          className={`w-full py-3 font-semibold rounded-lg shadow-sm mb-6 active:bg-gray-300 ${settings.darkMode ? 'bg-gray-800 text-gray-200 active:bg-gray-700' : 'bg-gray-200 text-gray-800 active:bg-gray-300'}`}
+          className={`w-full py-3 font-semibold rounded-lg shadow-sm mb-6 hover-lift ripple ${settings.darkMode ? 'bg-gray-800 text-gray-200' : 'bg-gray-200 text-gray-800'}`}
         >
           返回主界面
         </button>
         
         {/* 页面标题 */}
-        <div className="text-center mb-6">
+        <div className="text-center mb-6 animate-bounceSoft">
           <h2 className="text-2xl font-bold text-blue-600">参数设置</h2>
         </div>
         

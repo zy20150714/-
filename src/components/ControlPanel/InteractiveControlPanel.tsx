@@ -50,13 +50,13 @@ const InteractiveControlPanel: React.FC = () => {
         {/* 顶部显示区域 */}
         <div className="flex justify-between items-center gap-4">
           {/* 拍号显示框 - 上下排列 */}
-          <div className="bg-cyan-500 rounded-lg border-2 border-cyan-500 p-4 w-24 h-24 flex flex-col items-center justify-center">
+          <div className="bg-blue-500 rounded-lg border-2 border-blue-500 p-4 w-24 h-24 flex flex-col items-center justify-center">
             <div className="text-3xl font-bold text-white">{currentNumerator}</div>
             <div className="text-3xl font-bold text-white">{currentDenominator}</div>
           </div>
           
           {/* 时值图标框 */}
-          <div className="bg-cyan-500 rounded-lg border-2 border-cyan-500 p-4 w-24 h-24 flex items-center justify-center">
+          <div className="bg-blue-500 rounded-lg border-2 border-blue-500 p-4 w-24 h-24 flex items-center justify-center">
             <div className="text-4xl text-white">
               {getNoteValueSymbol(state.noteValue)}
             </div>
@@ -78,7 +78,7 @@ const InteractiveControlPanel: React.FC = () => {
               <button
                 key={`num-${num}`}
                 onClick={() => handleNumeratorChange(num)}
-                className={`px-4 py-2 rounded-lg min-w-[40px] transition-all ${currentNumerator === num ? 'bg-cyan-500 text-white font-bold' : settings.darkMode ? 'bg-gray-700 text-gray-100 hover:bg-cyan-900' : 'bg-white text-gray-800 hover:bg-cyan-100'}`}
+                className={`px-4 py-2 rounded-lg min-w-[40px] transition-all ${currentNumerator === num ? 'bg-blue-500 text-white font-bold' : settings.darkMode ? 'bg-gray-700 text-gray-100 hover:bg-blue-900' : 'bg-white text-gray-800 hover:bg-blue-100'}`}
               >
                 {num}
               </button>
@@ -94,7 +94,7 @@ const InteractiveControlPanel: React.FC = () => {
               <button
                 key={`den-${den}`}
                 onClick={() => handleDenominatorChange(den)}
-                className={`px-6 py-2 rounded-lg transition-all ${currentDenominator === den ? 'bg-cyan-500 text-white font-bold' : settings.darkMode ? 'bg-gray-700 text-gray-100 hover:bg-cyan-900' : 'bg-white text-gray-800 hover:bg-cyan-100'}`}
+                className={`px-6 py-2 rounded-lg transition-all ${currentDenominator === den ? 'bg-blue-500 text-white font-bold' : settings.darkMode ? 'bg-gray-700 text-gray-100 hover:bg-blue-900' : 'bg-white text-gray-800 hover:bg-blue-100'}`}
               >
                 {den}
               </button>
@@ -110,7 +110,7 @@ const InteractiveControlPanel: React.FC = () => {
               <button
                 key={`nv-${nv}`}
                 onClick={() => handleNoteValueChange(nv)}
-                className={`px-6 py-3 rounded-lg transition-all flex-shrink-0 ${state.noteValue === nv ? 'bg-cyan-500 text-white' : settings.darkMode ? 'bg-gray-700 text-gray-100 hover:bg-cyan-900' : 'bg-white text-gray-800 hover:bg-cyan-100'}`}
+                className={`px-6 py-3 rounded-lg transition-all flex-shrink-0 ${state.noteValue === nv ? 'bg-blue-500 text-white' : settings.darkMode ? 'bg-gray-700 text-gray-100 hover:bg-blue-900' : 'bg-white text-gray-800 hover:bg-blue-100'}`}
               >
                 <div className="text-3xl">{getNoteValueSymbol(nv)}</div>
               </button>
@@ -124,7 +124,7 @@ const InteractiveControlPanel: React.FC = () => {
           <div className="flex items-center gap-3">
             <button
               onClick={() => handleBPMChange(state.bpm - 1)}
-              className={`w-12 h-12 rounded-full font-bold text-2xl transition-all ${settings.darkMode ? 'bg-gray-700 text-white hover:bg-cyan-900' : 'bg-white text-gray-800 hover:bg-cyan-100'}`}
+              className={`w-12 h-12 rounded-full font-bold text-2xl transition-all ${settings.darkMode ? 'bg-gray-700 text-white hover:bg-blue-900' : 'bg-white text-gray-800 hover:bg-blue-100'}`}
             >
               -
             </button>
@@ -141,11 +141,11 @@ const InteractiveControlPanel: React.FC = () => {
               }}
               min="40"
               max="208"
-              className={`flex-1 px-4 py-3 rounded-lg text-center text-xl font-bold border-2 outline-none ${settings.darkMode ? 'bg-gray-700 text-white border-gray-600 focus:border-cyan-500' : 'bg-white text-gray-800 border-gray-300 focus:border-cyan-500'}`}
+              className={`flex-1 px-4 py-3 rounded-lg text-center text-xl font-bold border-2 outline-none ${settings.darkMode ? 'bg-gray-700 text-white border-gray-600 focus:border-blue-500' : 'bg-white text-gray-800 border-gray-300 focus:border-blue-500'}`}
             />
             <button
               onClick={() => handleBPMChange(state.bpm + 1)}
-              className={`w-12 h-12 rounded-full font-bold text-2xl transition-all ${settings.darkMode ? 'bg-gray-700 text-white hover:bg-cyan-900' : 'bg-white text-gray-800 hover:bg-cyan-100'}`}
+              className={`w-12 h-12 rounded-full font-bold text-2xl transition-all ${settings.darkMode ? 'bg-gray-700 text-white hover:bg-blue-900' : 'bg-white text-gray-800 hover:bg-blue-100'}`}
             >
               +
             </button>
