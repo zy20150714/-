@@ -31,7 +31,20 @@ const About: React.FC<AboutProps> = ({ onBack }) => {
             </p>
             
             <div className={`pt-4 border-t ${settings.darkMode ? 'border-gray-700' : 'border-gray-200'}`}>
-              <p className="font-medium">版本号：1.0.1</p>
+              <p className="font-medium">版本号：1.0.2</p>
+            </div>
+            
+            {/* GitHub开源地址 */}
+            <div className="pt-4">
+              <a 
+                href="https://github.com/zy20150714/-" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className={`flex items-center justify-center space-x-2 transition-all duration-300 hover:scale-105 hover-lift ${settings.darkMode ? 'text-blue-400' : 'text-blue-600'} hover:underline`}
+              >
+                <span className="text-2xl">�</span>
+                <span className="font-medium">GitHub开源地址</span>
+              </a>
             </div>
             
             <div className="pt-4 space-y-4">
@@ -88,10 +101,19 @@ const About: React.FC<AboutProps> = ({ onBack }) => {
                 
                 {/* 更新日志详情 */}
                 <div 
-                  className={`overflow-hidden transition-all duration-500 ease-in-out ${showUpdateLog ? 'max-h-60 opacity-100 animate-slideIn' : 'max-h-0 opacity-0'}`}
+                  className={`overflow-hidden transition-all duration-500 ease-in-out ${showUpdateLog ? 'max-h-80 opacity-100 animate-slideIn' : 'max-h-0 opacity-0'}`}
                 >
                   <div className={`mt-2 p-3 rounded-lg ${settings.darkMode ? 'bg-gray-700' : 'bg-gray-100'} animate-fadeIn`}>
                     <p className={`text-center font-medium mb-2 ${settings.darkMode ? 'text-gray-200' : 'text-gray-800'}`}>
+                      1.0.2
+                    </p>
+                    <p className={`text-sm ${settings.darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                      添加了GitHub开源地址显示
+                    </p>
+                    <p className={`text-sm ${settings.darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                      优化了界面交互体验
+                    </p>
+                    <p className={`text-center font-medium mb-2 mt-4 ${settings.darkMode ? 'text-gray-200' : 'text-gray-800'}`}>
                       1.0.1
                     </p>
                     <p className={`text-sm ${settings.darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
