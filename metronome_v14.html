@@ -122,9 +122,9 @@ body.t-neon .bg-glow::after{
 
 .header{position:relative;z-index:50;flex-shrink:0;height:var(--header-h);
   padding:env(safe-area-inset-top,0px) 16px 0;
-  display:flex;align-items:center;justify-content:space-between;
+  display:grid;grid-template-columns:40px 1fr 40px;align-items:center;
   background:var(--surface);border-bottom:1px solid var(--border)}
-.header-c{display:flex;align-items:center;gap:8px;flex:1;justify-content:center}
+.header-c{display:flex;align-items:center;gap:8px;justify-content:center}
 .header-title{font-size:1.05em;font-weight:800;color:var(--text);letter-spacing:.2px}
 .header-logo{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--primary),var(--secondary));
   display:flex;align-items:center;justify-content:center;color:#fff;box-shadow:var(--shadow-primary)}
@@ -144,8 +144,9 @@ body.t-rainbow .header-logo{
 .scroll-wrap{flex:1;position:relative;overflow:hidden;z-index:1;-webkit-overflow-scrolling:touch}
 .page{position:absolute;inset:0;overflow-y:auto;-webkit-overflow-scrolling:touch;
   padding:8px 14px calc(96px + env(safe-area-inset-bottom,0px));
-  opacity:0;visibility:hidden;transition:opacity .2s ease,visibility 0s linear .2s}
-.page.active{opacity:1;visibility:visible;transition-delay:0s}
+  opacity:0;visibility:hidden;transform:translateX(12px);
+  transition:opacity .25s ease,transform .25s ease,visibility 0s linear .25s}
+.page.active{opacity:1;visibility:visible;transform:translateX(0);transition-delay:0s}
 
 .nav{flex-shrink:0;position:relative;z-index:60;
   padding:6px 10px calc(6px + env(safe-area-inset-bottom,0px));
@@ -191,10 +192,10 @@ body.t-neon .bpm-card{
   box-shadow:0 0 30px rgba(0,255,136,.1),inset 0 1px 0 rgba(0,255,136,.1);
 }
 
-.pendulum-wrap{position:relative;height:42px;margin-bottom:2px;display:flex;align-items:center;justify-content:center}
-.pendulum{width:3px;height:44px;background:linear-gradient(180deg,var(--primary) 0%,var(--secondary) 100%);
+.pendulum-wrap{position:relative;height:44px;margin-bottom:2px;display:flex;align-items:flex-end;justify-content:center;overflow:visible}
+.pendulum{width:3px;height:32px;background:linear-gradient(180deg,var(--primary) 0%,var(--secondary) 100%);
   border-radius:2px;position:relative;transform-origin:top center;transition:transform 0s linear}
-.pendulum::after{content:"";position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);
+.pendulum::after{content:"";position:absolute;bottom:-7px;left:50%;transform:translateX(-50%);
   width:14px;height:14px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--secondary));
   box-shadow:0 2px 8px var(--glow)}
 body.t-neon .pendulum::after{
@@ -217,10 +218,11 @@ body.t-rainbow .bpm-num{
 body.t-neon .bpm-num{
   filter:drop-shadow(0 0 8px var(--primary));
 }
-.bpm-num.flash{filter:brightness(1.3) drop-shadow(0 0 12px var(--glow))}
-body.t-neon .bpm-num.flash{
-  filter:brightness(1.4) drop-shadow(0 0 20px var(--primary));
-}
+.bpm-num.flash{animation:bpmFlash .3s ease-out}
+@keyframes bpmFlash{0%{filter:brightness(1.5) drop-shadow(0 0 16px var(--glow))}100%{filter:none}}
+body.t-rainbow .bpm-num.flash{animation:rainbowText 3s linear infinite,bpmFlash .3s ease-out}
+body.t-neon .bpm-num.flash{animation:bpmFlashNeon .3s ease-out}
+@keyframes bpmFlashNeon{0%{filter:brightness(1.6) drop-shadow(0 0 24px var(--primary))}100%{filter:none}}
 
 .bpm-unit{color:var(--text-muted);font-size:.65em;letter-spacing:5px;margin-top:1px;
   text-transform:uppercase;font-weight:700;display:block}
@@ -294,8 +296,9 @@ body.t-rainbow .beat-dot[data-ac="1"]{
   background:conic-gradient(from 0deg,#ec4899,#8b5cf6,#3b82f6,#06b6d4,#10b981,#ec4899);
   animation:rainbowSpin 3s linear infinite;
 }
-.beat-dot.bt{transform:scale(1.2);box-shadow:0 0 28px var(--glow);z-index:2}
-.beat-sub{display:flex;justify-content:center;align-items:center;gap:4px;margin-top:4px;height:6px}
+.beat-dot.bt{animation:beatPulse .25s var(--bounce);box-shadow:0 0 28px var(--glow);z-index:2}
+@keyframes beatPulse{0%{transform:scale(1)}40%{transform:scale(1.3)}100%{transform:scale(1)}}
+.beat-sub{display:flex;justify-content:center;align-items:center;gap:4px;margin-top:4px;height:10px}
 .beat-sub-dot{width:5px;height:5px;border-radius:50%;background:var(--surface-3);transition:all .1s}
 .beat-sub-dot.on{background:var(--primary);transform:scale(1.6);box-shadow:0 0 8px var(--glow)}
 .beat-info{display:flex;justify-content:space-between;align-items:center;
@@ -304,6 +307,7 @@ body.t-rainbow .beat-dot[data-ac="1"]{
 .beat-sub-txt{color:var(--text-muted);font-size:.7em}
 
 .spectrum-wrap{height:40px;margin:8px 0;display:flex;align-items:flex-end;justify-content:center;gap:2px}
+.spec-bars-inner{display:flex;align-items:flex-end;justify-content:center;gap:2px;width:100%;height:100%}
 .spec-bar{width:6px;background:linear-gradient(to top,var(--primary),var(--secondary));
   border-radius:3px;transition:height .08s ease-out;opacity:.6}
 .spec-bar.accent{background:linear-gradient(to top,var(--accent),var(--primary))}
@@ -604,7 +608,7 @@ body.t-neon .practice-bar{
 .menu-mask.show{opacity:1;pointer-events:auto}
 .menu-mask.hide{opacity:0;pointer-events:none}
 .menu-sheet{background:var(--surface);width:100%;max-width:380px;
-  border-radius:20px 20px 0 0;padding:0 0 32px;
+  border-radius:20px 20px 0 0;padding:0 0 calc(24px + env(safe-area-inset-bottom,0px));
   box-shadow:var(--shadow-xl);
   transform:translateY(100%);transition:transform .35s cubic-bezier(.34,1.56,.64,1)}
 .menu-mask.show .menu-sheet{transform:translateY(0)}
@@ -871,8 +875,8 @@ body.t-neon .practice-bar{
   .guide-themes{grid-template-columns:repeat(3,1fr)}
   .tap-btn{width:84px;height:84px;font-size:.9em}
   .tap-val{font-size:2.2em}
-  .pendulum-wrap{height:40px}
-  .pendulum{height:36px}
+  .pendulum-wrap{height:38px}
+  .pendulum{height:28px}
   .page{padding-bottom:90px}
   .card{padding:12px;margin-bottom:8px}
   .card-h{margin-bottom:8px}
@@ -891,6 +895,39 @@ body.t-neon .practice-bar{
   .guide-ic{width:56px;height:56px;margin-bottom:12px}
   .guide-ic svg{width:28px;height:28px}
   .guide-themes-scroll{max-height:160px}
+  .bpm-ctrl{gap:4px}
+  .btn-circle{width:36px;height:36px;font-size:1.1em}
+  .btn-circle.big{width:40px;height:40px}
+  .bpm-input{width:64px;height:36px;font-size:1.1em}
+  .countdown-wrap{flex-wrap:wrap;gap:6px}
+  .cs-wave-select{gap:4px}
+  .cs-wave-btn{padding:5px 8px;font-size:.68em}
+  .accel-ramp{flex-wrap:wrap}
+  .accel-btn{font-size:.68em;padding:8px 4px}
+  .custom-ts{flex-wrap:wrap}
+  .num-in{width:48px;height:36px}
+  .header-title{font-size:.95em}
+  .vol-lbl{width:56px;font-size:.78em}
+  .stat-mini-n{font-size:1em}
+}
+
+@media(max-width:320px){
+  .bpm-num{font-size:2.2em}
+  .beat-dot{width:28px;height:28px;font-size:.72em}
+  .tap-btn{width:72px;height:72px;font-size:.85em}
+  .tap-val{font-size:1.8em}
+  .btn-circle{width:32px;height:32px;font-size:1em}
+  .btn-circle.big{width:36px;height:36px}
+  .bpm-input{width:56px;height:32px;font-size:1em}
+  .play-rings{width:80px;height:80px}
+  .play-btn{width:48px;height:48px}
+  .play-btn svg{width:18px;height:18px}
+  .nav-lbl{font-size:.6em}
+  .header-title{font-size:.88em}
+  .header-logo{width:24px;height:24px}
+  .card{padding:10px}
+  .page-t{font-size:1.2em}
+  .vol-lbl{width:48px;font-size:.72em}
 }
 
 @media(min-height:800px){
@@ -900,14 +937,16 @@ body.t-neon .practice-bar{
 @media(max-height:600px){
   .bpm-card{padding:6px 12px 2px}
   .bpm-num{font-size:2.4em}
-  .pendulum-wrap{height:28px}
-  .pendulum{height:26px}
+  .pendulum-wrap{height:32px}
+  .pendulum{height:22px}
   .play-rings{width:72px;height:72px}
   .play-btn{width:52px;height:52px}
   .play-btn svg{width:20px;height:20px}
   .card{padding:10px;margin-bottom:6px}
   .guide-box{max-height:85vh;overflow-y:auto}
   .guide-themes-scroll{max-height:120px}
+  .spectrum-wrap{height:28px;margin:4px 0}
+  .bpm-tags{margin-top:4px}
 }
 
 .play-ring{will-change:transform,opacity}
@@ -917,7 +956,6 @@ body.t-neon .practice-bar{
 .play-btn{will-change:transform,box-shadow}
 .play-btn.playing{will-change:transform,box-shadow,background}
 
-@keyframes beatPulse{0%{transform:scale(1)}50%{transform:scale(1.2)}100%{transform:scale(1)}}
 @keyframes ripple{0%{transform:scale(1);opacity:.8}100%{transform:scale(2.5);opacity:0}}
 
 @media(prefers-reduced-motion:reduce){
@@ -928,12 +966,39 @@ body.t-neon .practice-bar{
   .app{height:calc(100vh - 20px);border-radius:24px}
   .bpm-card{padding:6px 12px 2px}
   .bpm-num{font-size:2.4em}
-  .pendulum-wrap{height:32px}
-  .pendulum{height:32px}
+  .pendulum-wrap{height:34px}
+  .pendulum{height:24px}
   .play-rings{width:80px;height:80px}
   .play-btn{width:56px;height:56px}
   .play-btn svg{width:22px;height:22px}
   .card{padding:10px;margin-bottom:6px}
+}
+
+@media(orientation:landscape) and (max-height:500px){
+  .app{max-width:720px}
+  .header{height:44px}
+  .nav{padding:4px 10px}
+  .nav-ic{width:28px;height:28px}
+  .nav-lbl{font-size:.6em}
+  .bpm-card{padding:4px 12px}
+  .bpm-num{font-size:2em}
+  .pendulum-wrap{height:28px}
+  .pendulum{height:20px}
+  .play-rings{width:64px;height:64px}
+  .play-btn{width:48px;height:48px}
+  .play-btn svg{width:20px;height:20px}
+  .spectrum-wrap{height:28px;margin:4px 0}
+  .card{padding:8px;margin-bottom:4px}
+  .card-h{margin-bottom:6px}
+  .page{padding:4px 12px 80px}
+  .beat-dot{width:28px;height:28px;font-size:.72em}
+  .tap-btn{width:72px;height:72px;font-size:.85em}
+  .tap-val{font-size:1.8em}
+  .stat-mini-n{font-size:1em}
+  .guide-box{max-height:90vh;overflow-y:auto;padding:16px 14px}
+  .guide-themes-scroll{max-height:100px}
+  .practice-run{padding:14px 16px}
+  .practice-cd{font-size:2.6em}
 }
 
 .theme-open-btn{display:flex;align-items:center;justify-content:space-between;width:100%;padding:12px;
@@ -952,7 +1017,7 @@ body.t-neon .practice-bar{
 .theme-picker-mask.show{opacity:1;pointer-events:auto}
 .theme-picker-mask.hide{opacity:0;pointer-events:none}
 .theme-picker-sheet{background:var(--surface);width:100%;max-width:480px;
-  border-radius:28px 28px 0 0;padding:20px 16px 32px;
+  border-radius:28px 28px 0 0;padding:20px 16px calc(24px + env(safe-area-inset-bottom,0px));
   box-shadow:var(--shadow-xl);
   transform:translateY(100%);transition:transform .35s cubic-bezier(.34,1.56,.64,1);
   max-height:90vh;overflow-y:auto}
@@ -964,7 +1029,7 @@ body.t-neon .practice-bar{
   background:var(--surface-2);border:0;color:var(--text-sec);font-size:1em;cursor:pointer;
   display:flex;align-items:center;justify-content:center;transition:all var(--fast)}
 .theme-picker-close:active{background:var(--surface-3)}
-.theme-picker-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;max-height:60vh;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.theme-picker-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;-webkit-overflow-scrolling:touch}
 .theme-item{padding:14px;border-radius:var(--r-lg);border:2px solid transparent;
   background:var(--surface-2);cursor:pointer;transition:all var(--fast);position:relative;overflow:hidden}
 .theme-item:active{transform:scale(.98)}
@@ -1048,7 +1113,7 @@ body.t-neon .practice-bar{
         <div class="bpm-speed" id="bpm-speed">Moderato</div>
         <div class="bpm-tags" id="bpm-tags"></div>
         <div class="spectrum-wrap" id="spectrum-wrap">
-          <div class="spectrum-wrap" id="spec-bars"></div>
+          <div class="spec-bars-inner" id="spec-bars"></div>
         </div>
       </div>
 
@@ -1077,6 +1142,9 @@ body.t-neon .practice-bar{
         <button class="cd-btn on" data-cd="off">关</button>
         <button class="cd-btn" data-cd="4">4拍</button>
         <button class="cd-btn" data-cd="8">8拍</button>
+      </div>
+      <div style="display:flex;justify-content:center;margin-top:6px">
+        <button class="cd-btn" id="btn-fav-current" title="收藏当前配置" style="min-width:120px">☆ 收藏</button>
       </div>
 
       <div class="beat-panel">
@@ -1185,6 +1253,15 @@ body.t-neon .practice-bar{
           <span class="card-t">细分音符 <span class="badge-new">NEW</span></span>
         </div>
         <div class="sub-grid" id="sub-grid"></div>
+        <div class="vol-row" style="margin-top:12px">
+          <span class="vol-lbl">摇摆</span>
+          <div class="rng-wrap" style="flex:1;margin:0">
+            <div class="rng-track"><div class="rng-fill" id="swing-fill"></div></div>
+            <input type="range" class="rng" id="swing-rng" min="0" max="100" value="0"/>
+          </div>
+          <span class="vol-val" id="swing-v">0%</span>
+        </div>
+        <div class="slider-hint">摇摆感（Swing）让奇数拍延长，产生爵士节奏感</div>
       </div>
 
       <div class="card">
@@ -1363,7 +1440,7 @@ body.t-neon .practice-bar{
             <div class="card-ic"><svg viewBox="0 0 24 24"><path d="M20 7L9 18l-5-5"/></svg></div>
             <span class="card-t">随机节拍 <span class="badge-new">NEW</span></span>
           </div>
-          <div class="card-sub">随机变化节拍，训练节奏感</div>
+          <div class="card-sub">先开始播放，再点击模式启动随机变化（再次点击同一模式可停止）</div>
           <div class="sig-grid two" style="margin-bottom:10px">
             <div class="sig-btn" data-rand="mild">轻度随机<br><span style="font-size:.7em;font-weight:500">±10% 变化</span></div>
             <div class="sig-btn" data-rand="medium">中度随机<br><span style="font-size:.7em;font-weight:500">±25% 变化</span></div>
@@ -1382,6 +1459,7 @@ body.t-neon .practice-bar{
             <div class="stat-item"><div class="stat-n" id="stat-bars">0</div><div class="stat-l">小节数</div></div>
             <div class="stat-item"><div class="stat-n" id="stat-time">0:00</div><div class="stat-l">练习时长</div></div>
           </div>
+          <button class="tap-btn-s sec" style="width:100%;height:40px;margin-top:10px" id="btn-reset-stats"><span>重置统计</span></button>
         </div>
       </div>
 
@@ -1645,14 +1723,14 @@ body.t-neon .practice-bar{
         <div class="about-hero">
           <div class="about-logo"><svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div>
           <div class="about-ver">节拍器 Pro v14</div>
-          <div class="about-sub">究极进化版 · 22种主题 · 20+功能</div>
+          <div class="about-sub">究极进化版 · 25种主题 · 20+功能</div>
           <div class="about-ai">
             <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
             AI 辅助开发 · 专业节拍器
           </div>
         </div>
         <div class="feat-grid">
-          <div class="feat-item"><div class="feat-ic"><svg viewBox="0 0 24 24"><path d="M12 2l2.4 7.4h7.6l-6 4.6 2.3 7-6.3-4.6-6.3 4.6 2.3-7-6-4.6h7.6z"/></svg></div><div class="feat-n">22种主题</div><div class="feat-d">随心切换</div></div>
+          <div class="feat-item"><div class="feat-ic"><svg viewBox="0 0 24 24"><path d="M12 2l2.4 7.4h7.6l-6 4.6 2.3 7-6.3-4.6-6.3 4.6 2.3-7-6-4.6h7.6z"/></svg></div><div class="feat-n">25种主题</div><div class="feat-d">随心切换</div></div>
           <div class="feat-item"><div class="feat-ic"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div><div class="feat-n">精准音频</div><div class="feat-d">Web Audio</div></div>
           <div class="feat-item"><div class="feat-ic"><svg viewBox="0 0 24 24"><path d="M20 7L9 18l-5-5"/></svg></div><div class="feat-n">练习模式</div><div class="feat-d">渐进训练</div></div>
           <div class="feat-item"><div class="feat-ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div class="feat-n">速度渐变</div><div class="feat-d">渐快渐慢</div></div>
@@ -1749,7 +1827,7 @@ body.t-neon .practice-bar{
     <div class="theme-picker-sheet" id="theme-picker-sheet">
       <div class="theme-picker-header">
         <div class="theme-picker-title">选择主题</div>
-        <div class="theme-picker-subtitle">共 22 款精选主题</div>
+        <div class="theme-picker-subtitle">共 25 款精选主题</div>
         <button class="theme-picker-close" id="theme-picker-close">✕</button>
       </div>
       <div class="theme-picker-grid" id="theme-picker-grid"></div>
@@ -1771,6 +1849,7 @@ var CFG={
   particles:true,wake:false,swing:0,anim_amt:70,countdown:0,bg_sound:'none',vis_style:'dots',
   cs_wave:'sine',cs_accent_freq:1500,cs_beat_freq:1000,cs_duration:50,
   tuner_freq:440,tuner_wave:'sine',rand_mode:'mild',ramp_mode:'up',ramp_start:80,ramp_end:120,ramp_time:5,
+  ambient_sensitivity:50,ambient_base_volume:70,
   favs:[]
 };
 
@@ -1798,7 +1877,10 @@ var THEMES=[
   {id:'rainbow',name:'彩虹',c1:'#ec4899',c2:'#8b5cf6'},
   {id:'neon',name:'霓虹',c1:'#00ff88',c2:'#00ccff'},
   {id:'sunset',name:'日落',c1:'#f97316',c2:'#ef4444'},
-  {id:'ocean',name:'海洋',c1:'#0891b2',c2:'#0d9488'}
+  {id:'ocean',name:'海洋',c1:'#0891b2',c2:'#0d9488'},
+  {id:'cherry',name:'樱花',c1:'#be123c',c2:'#e11d48'},
+  {id:'mint',name:'薄荷',c1:'#0d9488',c2:'#10b981'},
+  {id:'lavender',name:'薰衣草',c1:'#7c3aed',c2:'#8b5cf6'}
 ];
 
 var PRESETS=[
@@ -1846,7 +1928,10 @@ var state={
   bg_node:null,bg_gain:null,tuner_osc:null,tuner_gain:null,
   ramp_current:0,ramp_timer:null,history:[],current_bpm_display:120,
   ambient_listening:false,ambient_analyser:null,ambient_microphone:null,ambient_stream:null,
-  ambient_level:0,ambient_sensitivity:50,ambient_base_volume:70,ambient_animation:null
+  ambient_level:0,ambient_sensitivity:50,ambient_base_volume:70,ambient_animation:null,
+  ambient_vol_mult:1,silent_muted:false,custom_accent:-1,rand_active:false,rand_timer:null,
+  rand_base_bpm:0,
+  countdown_timer:null
 };
 
 function $(id){return document.getElementById(id)}
@@ -1859,7 +1944,9 @@ function toast(msg,dur){
   clearTimeout(t._tid);t._tid=setTimeout(function(){t.classList.remove('show')},dur||2000);
 }
 
+var _save_cfg_tid=null;
 function save_cfg(){try{localStorage.setItem(LS_KEY,JSON.stringify(CFG))}catch(e){}}
+function save_cfg_debounced(){if(_save_cfg_tid)clearTimeout(_save_cfg_tid);_save_cfg_tid=setTimeout(function(){_save_cfg_tid=null;save_cfg();},300);}
 function load_cfg(){try{var s=localStorage.getItem(LS_KEY);if(s){Object.assign(CFG,JSON.parse(s))}}catch(e){}}
 function save_stats(){try{localStorage.setItem(STATS_KEY,JSON.stringify({beats:state.total_beats,bars:state.total_bars,time:state.total_time}))}catch(e){}}
 function load_stats(){try{var s=localStorage.getItem(STATS_KEY);if(s){var d=JSON.parse(s);state.total_beats=d.beats||0;state.total_bars=d.bars||0;state.total_time=d.time||0}}catch(e){}}
@@ -1888,11 +1975,12 @@ function init_audio(){
 }
 
 function play_click(is_accent,is_sub){
-  if(!state.audio_ctx||(CFG.visual&&!is_accent))return;
+  if(!state.audio_ctx)return;
   var ctx=state.audio_ctx,t=ctx.currentTime;
-  var s=SOUNDS[CFG.sound],freq=s.freq_a,dur=s.dur/1000,wave=s.wave,vol=CFG.vol_beat/100;
-  if(is_accent){vol=CFG.vol_accent/100;freq=s.freq_a;}
+  var s=SOUNDS[CFG.sound],freq=is_accent?s.freq_a:s.freq_b,dur=s.dur/1000,wave=s.wave,vol=CFG.vol_beat/100;
+  if(is_accent){vol=CFG.vol_accent/100;}
   else if(is_sub){vol=CFG.vol_sub/100;freq=s.freq_b*0.7;dur=dur*0.6;}
+  if(state.ambient_listening)vol=vol*state.ambient_vol_mult;
   if(CFG.sound===SOUNDS.length-1){
     wave=CFG.cs_wave;freq=is_accent?CFG.cs_accent_freq:CFG.cs_beat_freq;dur=CFG.cs_duration/1000;
   }
@@ -1949,17 +2037,20 @@ function scheduler(){
 function schedule_note(time){
   var sc=get_sub_count();
   var is_first=state.cur_beat===0&&state.cur_sub===0;
-  var is_accent=is_first,is_beat=state.cur_sub===0;
+  var accent_pos=state.custom_accent>=0?state.custom_accent:0;
+  var is_accent=state.custom_accent>=0?(state.cur_beat===accent_pos&&state.cur_sub===0):is_first;
+  var is_beat=state.cur_sub===0;
   var do_flash=CFG.flash&&is_beat;
-  if(CFG.vibrate&&is_beat&&window.navigator.vibrate){
-    var vt=is_first?40:20;
+  var muted=state.silent_muted;
+  if(CFG.vibrate&&is_beat&&!muted&&window.navigator.vibrate){
+    var vt=is_accent?40:20;
     setTimeout(function(){navigator.vibrate(vt)},(time-state.audio_ctx.currentTime)*1000);
   }
-  if(!CFG.visual){
+  if(!CFG.visual&&!muted){
     setTimeout(function(){play_click(is_accent,!is_beat)},(time-state.audio_ctx.currentTime)*1000);
   }
   setTimeout(function(){
-    if(do_flash)flash_beat(is_first);
+    if(do_flash&&!muted)flash_beat(is_accent);
     if(is_beat)update_beat_disp();
     if(sc>1&&CFG.flash)update_sub_disp();
   },(time-state.audio_ctx.currentTime)*1000);
@@ -1979,21 +2070,26 @@ function next_note(){
   }
 }
 
-function flash_beat(is_first){
+function flash_beat(is_accent){
   var n=$('bpm-disp');n.classList.remove('flash');void n.offsetWidth;n.classList.add('flash');
-  var r=is_first?'r3':'r2',ring=$(r);ring.classList.remove('go');void ring.offsetWidth;ring.classList.add('go');
-  var r1=$('r1');r1.classList.remove('go');void r1.offsetWidth;r1.classList.add('go');
-  var pend=$('pendulum'),angle=state.pendulum_dir?15:-15,dur=(60/CFG.bpm)*1000*0.9;
-  pend.style.transition='transform '+(dur/1000)+'s cubic-bezier(.4,.2,.2,1)';
-  pend.style.transform='rotate('+angle+'deg)';
-  state.pendulum_dir=!state.pendulum_dir;
+  setTimeout(function(){n.classList.remove('flash');},300);
+  ['r1','r2','r3'].forEach(function(rid){
+    var ring=$(rid);if(ring){ring.classList.remove('go');void ring.offsetWidth;ring.classList.add('go');}
+  });
+  var pend=$('pendulum');
+  if(pend&&CFG.flash){
+    var angle=state.pendulum_dir?15:-15,dur=(60/CFG.bpm)*1000*0.9;
+    pend.style.transition='transform '+(dur/1000)+'s cubic-bezier(.4,.2,.2,1)';
+    pend.style.transform='rotate('+angle+'deg)';
+    state.pendulum_dir=!state.pendulum_dir;
+  }
 }
 
 function update_beat_disp(){
   var dots=qsa('.beat-dot');
   dots.forEach(function(d,i){
     d.dataset.ac=+(i===state.cur_beat);
-    if(i===state.cur_beat){d.classList.add('bt');setTimeout(function(){d.classList.remove('bt')},100);}
+    if(i===state.cur_beat){d.classList.add('bt');setTimeout(function(){d.classList.remove('bt')},260);}
   });
 }
 function update_sub_disp(){
@@ -2013,7 +2109,13 @@ function update_bpm(v){
   else if(v<150)speed='Allegro';else if(v<170)speed='Vivace';
   else if(v<200)speed='Presto';else speed='Prestissimo';
   $('bpm-speed').textContent=speed;
-  update_bpm_tags(v);save_cfg();
+  update_bpm_tags(v);save_cfg_debounced();update_fav_btn_state();
+}
+function update_fav_btn_state(){
+  var btn=$('btn-fav-current');if(!btn)return;
+  var fav=is_fav(CFG.bpm,CFG.ts_beats,CFG.ts_value,CFG.subdivision,CFG.sound);
+  btn.classList.toggle('on',fav);
+  btn.textContent=fav?'★ 已收藏':'☆ 收藏';
 }
 
 function update_bpm_tags(v){
@@ -2055,7 +2157,7 @@ function render_favs(){
     d.innerHTML='<div class="preset-n">'+f.bpm+'</div><div class="preset-l">'+f.beats+'/'+f.val+'</div>';
     d.addEventListener('click',function(){
       update_bpm(f.bpm);CFG.ts_beats=f.beats;CFG.ts_value=f.val;CFG.subdivision=f.sub;CFG.sound=f.sound;
-      render_beats();render_presets();render_favs();render_sigs();render_subs();render_sounds();save_cfg();toast('已应用收藏');
+      render_beats();render_presets();render_favs();render_sigs();render_subs();render_sounds();save_cfg();update_fav_btn_state();add_history(f.bpm,f.beats,f.val,f.sub,f.sound);toast('已应用收藏');
     });c.appendChild(d);
   });
 }
@@ -2078,7 +2180,7 @@ function render_sigs(){
     d.innerHTML='<span>'+s.l+'</span>';
     d.addEventListener('click',function(){
       CFG.ts_beats=s.b;CFG.ts_value=s.v;state.cur_beat=0;state.cur_sub=0;
-      render_beats();render_sigs();save_cfg();
+      render_beats();render_sigs();save_cfg();update_fav_btn_state();
     });c.appendChild(d);
   });
 }
@@ -2088,7 +2190,7 @@ function render_subs(){
   SUBDIVS.forEach(function(s,idx){
     var d=document.createElement('div');d.className='sub-btn'+(CFG.subdivision===idx?' on':'');
     d.innerHTML='<div class="sub-sym">'+s.sym+'</div><span>'+s.l+'</span>';
-    d.addEventListener('click',function(){CFG.subdivision=idx;state.cur_sub=0;render_beats();render_subs();save_cfg();});
+    d.addEventListener('click',function(){CFG.subdivision=idx;state.cur_sub=0;render_beats();render_subs();save_cfg();update_fav_btn_state();});
     c.appendChild(d);
   });
 }
@@ -2098,21 +2200,8 @@ function render_sounds(){
   SOUNDS.forEach(function(s,idx){
     var d=document.createElement('div');d.className='sound-btn'+(CFG.sound===idx?' on':'');
     d.innerHTML='<div class="sound-ic"><svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div><span>'+s.name+'</span>';
-    d.addEventListener('click',function(){CFG.sound=idx;render_sounds();save_cfg();play_click(true,false);});
+    d.addEventListener('click',function(){CFG.sound=idx;render_sounds();save_cfg();play_click(true,false);update_fav_btn_state();});
     c.appendChild(d);
-  });
-}
-
-function render_themes(container,on_select){
-  var c=container||$('theme-grid');if(!c)return;c.innerHTML='';
-  THEMES.forEach(function(t){
-    var d=document.createElement('div');d.className='theme-btn'+(CFG.theme===t.id?' on':'');
-    d.innerHTML='<div class="theme-dot" style="background:linear-gradient(135deg,'+t.c1+','+t.c2+')"></div><span>'+t.name+'</span>';
-    d.addEventListener('click',function(){
-      apply_theme(t.id);
-      if(on_select)on_select(t.id);
-      else{save_cfg();if(container===$('theme-grid')){render_themes();render_presets();render_favs();}toast('已切换到'+t.name+'主题');}
-    });c.appendChild(d);
   });
 }
 
@@ -2168,26 +2257,72 @@ function start(){
   if(state.audio_ctx.state==='suspended')state.audio_ctx.resume();
   state.playing=true;state.cur_beat=0;state.cur_sub=0;state.beat_count=0;state.bar_count=0;
   state.start_time=Date.now();state.next_note=state.audio_ctx.currentTime+0.05;state.pendulum_dir=0;
+  state.silent_muted=false;state.custom_accent=-1;
+  if(state.rand_timer){clearInterval(state.rand_timer);state.rand_timer=null;}
+  state.rand_active=false;
   $('play-btn').classList.add('playing');
   $('play-ic').innerHTML='<rect x="6" y="5" width="4" height="14"/><rect x="14" y="5" width="4" height="14"/>';
-  $('play-label').textContent='正在播放';
-  state.timer=setInterval(scheduler,state.lookahead);
   if(CFG.wake)set_wake_lock(true);
-  init_bg_sound();$('stat-mini').style.display='grid';
+  $('stat-mini').style.display='grid';
   add_history(CFG.bpm,CFG.ts_beats,CFG.ts_value,CFG.subdivision,CFG.sound);
+  if(CFG.countdown>0){
+    state.countdown=CFG.countdown;state.countdown_beats=0;
+    $('play-label').textContent='倒计时 '+state.countdown;
+    init_bg_sound();
+    run_countdown();
+  }else{
+    $('play-label').textContent='正在播放';
+    init_bg_sound();
+    state.timer=setInterval(scheduler,state.lookahead);
+  }
+}
+
+function run_countdown(){
+  if(state.countdown<=0){
+    $('play-label').textContent='正在播放';
+    state.next_note=state.audio_ctx.currentTime+0.05;
+    state.timer=setInterval(scheduler,state.lookahead);
+    return;
+  }
+  play_click(true,false);
+  if(CFG.flash)flash_beat(true);
+  $('play-label').textContent='倒计时 '+state.countdown;
+  state.countdown--;
+  if(state.countdown>0){
+    state.countdown_timer=setTimeout(run_countdown,(60/CFG.bpm)*1000);
+  }else{
+    state.countdown_timer=setTimeout(function(){
+      $('play-label').textContent='正在播放';
+      state.next_note=state.audio_ctx.currentTime+0.05;
+      state.timer=setInterval(scheduler,state.lookahead);
+    },(60/CFG.bpm)*1000);
+  }
 }
 
 function stop(){
   if(!state.playing)return;state.playing=false;
   clearInterval(state.timer);state.timer=null;
+  if(state.countdown_timer){clearTimeout(state.countdown_timer);state.countdown_timer=null;}
+  state.countdown=0;state.silent_muted=false;state.custom_accent=-1;state.rand_active=false;
+  var had_practice=state.practice!==null;
+  var had_ramp=state.ramp_timer!==null;
+  if(state.practice_timer){clearInterval(state.practice_timer);state.practice_timer=null;}
+  if(state.practice){state.practice=null;}
+  if(had_practice||had_ramp){
+    var plw=$('practice-list-wrap'),prw=$('practice-run-wrap');
+    if(plw)plw.style.display='';if(prw)prw.style.display='none';
+    var prb=$('pr-bar');if(prb)prb.style.width='0%';
+  }
   state.total_time+=Math.floor((Date.now()-state.start_time)/1000);save_stats();
   $('play-btn').classList.remove('playing');
   $('play-ic').innerHTML='<polygon points="5 3 19 12 5 21 5 3"/>';
   $('play-label').textContent='点击开始';
-  set_wake_lock(false);stop_bg_sound();stop_ramp();
+  set_wake_lock(false);stop_bg_sound();stop_ramp();stop_random();
   qsa('.beat-dot').forEach(function(d,i){d.dataset.ac=+(i===0);});
   qsa('.beat-sub-dot').forEach(function(d){d.classList.remove('on');});
-  $('pendulum').style.transform='rotate(0deg)';
+  var pend=$('pendulum');
+  if(pend){pend.style.transition='transform .3s ease';pend.style.transform='rotate(0deg)';}
+  state.pendulum_dir=0;
 }
 
 function toggle_play(){if(state.playing)stop();else start();}
@@ -2214,21 +2349,21 @@ function render_history(){
     d.innerHTML='<span class="history-bpm">'+h.bpm+' BPM · '+h.beats+'/'+h.val+'</span><span class="history-time">'+ts+'</span>';
     d.addEventListener('click',function(){
       update_bpm(h.bpm);CFG.ts_beats=h.beats;CFG.ts_value=h.val;CFG.subdivision=h.sub;CFG.sound=h.sound;
-      render_beats();render_presets();render_favs();render_sigs();render_subs();render_sounds();save_cfg();toast('已应用');
+      render_beats();render_presets();render_favs();render_sigs();render_subs();render_sounds();save_cfg();update_fav_btn_state();toast('已应用');
     });c.appendChild(d);
   });
 }
 
 function show_page(id){
-  qsa('.page').forEach(function(p){p.classList.remove('active');});
+  qsa('.page').forEach(function(p){p.classList.remove('active');p.scrollTop=0;});
   $(id).classList.add('active');
   qsa('.nav-item').forEach(function(n){n.classList.toggle('on',n.dataset.page===id);});
   var titles={'pg-home':'节拍器 Pro','pg-params':'参数设置','pg-practice':'练习模式','pg-settings':'设置','pg-tap':'敲击测速','pg-tuner':'调音器','pg-about':'关于','pg-legal':'使用条款'};
   if(titles[id])$('hdr-title').textContent=titles[id];
   var back=(id==='pg-tap'||id==='pg-tuner'||id==='pg-about'||id==='pg-legal');
   $('btn-back').classList.toggle('hidden',!back);
-  $('scroll-wrap').scrollTop=0;
   if(id==='pg-practice')render_stats();
+  if(id==='pg-tuner'){var cv=$('tuner-canvas');if(cv&&cv.offsetWidth){cv.width=cv.offsetWidth;cv.height=cv.offsetHeight;}}
 }
 
 function init_nav(){
@@ -2249,6 +2384,10 @@ function init_nav(){
   render_theme_preview();
   render_presets();
   render_favs();
+  var btnRate=$('btn-rate');
+  if(btnRate)btnRate.addEventListener('click',function(){
+    toast('感谢支持！请到应用商店给我们五星好评');
+  });
 }
 
 function init_controls(){
@@ -2261,7 +2400,7 @@ function init_controls(){
     btn.addEventListener('touchstart',function(e){e.preventDefault();dc();press_timer=setTimeout(function(){interval=setInterval(dc,80);},400);});
     btn.addEventListener('touchend',function(){clearTimeout(press_timer);clearInterval(interval);});
   });
-  $('bpm-in').addEventListener('change',function(){var v=parseInt(this.value);if(isNaN(v))v=120;update_bpm(v);render_presets();render_favs();});
+  $('bpm-in').addEventListener('change',function(){var v=parseInt(this.value);if(isNaN(v))v=120;update_bpm(v);render_presets();render_favs();add_history(CFG.bpm,CFG.ts_beats,CFG.ts_value,CFG.subdivision,CFG.sound);});
   $('bpm-in').addEventListener('blur',function(){this.value=CFG.bpm;});
   $('bpm-rng').addEventListener('input',function(){update_bpm(parseInt(this.value));});
   $('bpm-rng').addEventListener('change',function(){render_presets();render_favs();add_history(CFG.bpm,CFG.ts_beats,CFG.ts_value,CFG.subdivision,CFG.sound);});
@@ -2276,13 +2415,34 @@ function init_controls(){
   $('play-btn').addEventListener('click',toggle_play);
   $('ct-apply').addEventListener('click',function(){
     var b=parseInt($('ct-beats').value),v=parseInt($('ct-bv').value);
-    if(b>=1&&b<=32){CFG.ts_beats=b;CFG.ts_value=v;state.cur_beat=0;state.cur_sub=0;render_beats();render_sigs();save_cfg();toast('已应用 '+b+'/'+v);}
+    if(b>=1&&b<=32){CFG.ts_beats=b;CFG.ts_value=v;state.cur_beat=0;state.cur_sub=0;render_beats();render_sigs();save_cfg();update_fav_btn_state();toast('已应用 '+b+'/'+v);}
   });
   qsa('.cd-btn').forEach(function(b){
-    b.addEventListener('click',function(){
-      qsa('.cd-btn').forEach(function(x){x.classList.remove('on');});b.classList.add('on');
-      var v=b.dataset.cd;CFG.countdown=v==='off'?0:parseInt(v);save_cfg();
+    var v=b.dataset.cd;
+    if(v==='off'||v==='4'||v==='8'){
+      var cv=v==='off'?0:parseInt(v);
+      b.classList.toggle('on',CFG.countdown===cv);
+      b.addEventListener('click',function(){
+        qsa('.cd-btn').forEach(function(x){if(x.dataset.cd)x.classList.remove('on');});b.classList.add('on');
+        CFG.countdown=cv;save_cfg();
+      });
+    }
+  });
+  var favBtn=$('btn-fav-current');
+  if(favBtn){
+    favBtn.addEventListener('click',function(){
+      toggle_fav(CFG.bpm,CFG.ts_beats,CFG.ts_value,CFG.subdivision,CFG.sound);
+      update_fav_btn_state();
     });
+    update_fav_btn_state();
+  }
+}
+
+function init_swing(){
+  var rng=$('swing-rng'),fill=$('swing-fill'),val=$('swing-v');
+  rng.value=CFG.swing;fill.style.width=CFG.swing+'%';val.textContent=CFG.swing+'%';
+  rng.addEventListener('input',function(){
+    var v=parseInt(this.value);fill.style.width=v+'%';val.textContent=v+'%';CFG.swing=v;save_cfg_debounced();
   });
 }
 
@@ -2294,19 +2454,19 @@ function init_toggles(){
   $('tog-visual').checked=CFG.visual;$('tog-visual').addEventListener('change',function(){CFG.visual=this.checked;save_cfg();toast(this.checked?'已开启视觉节拍模式':'已关闭视觉节拍模式');});
   $('tog-particles').checked=CFG.particles;$('tog-particles').addEventListener('change',function(){CFG.particles=this.checked;state.particles_on=this.checked;save_cfg();});
   $('anim-amt').value=CFG.anim_amt;$('anim-fill').style.width=CFG.anim_amt+'%';
-  $('anim-amt').addEventListener('input',function(){CFG.anim_amt=parseInt(this.value);$('anim-fill').style.width=CFG.anim_amt+'%';save_cfg();});
+  $('anim-amt').addEventListener('input',function(){CFG.anim_amt=parseInt(this.value);$('anim-fill').style.width=CFG.anim_amt+'%';save_cfg_debounced();});
 }
 
 function init_volumes(){
   function ss(id,val,fid,did,cb){
     $(id).value=val;$(fid).style.width=val+'%';$(did).textContent=val;
     $(id).addEventListener('input',function(){var v=parseInt(this.value);$(fid).style.width=v+'%';$(did).textContent=v;});
-    $(id).addEventListener('change',function(){var v=parseInt(this.value);if(cb)cb(v);save_cfg();});
+    $(id).addEventListener('change',function(){var v=parseInt(this.value);if(cb)cb(v);save_cfg_debounced();});
   }
   ss('vol-accent',CFG.vol_accent,'vol-accent-fill','vol-accent-v',function(v){CFG.vol_accent=v;});
   ss('vol-beat',CFG.vol_beat,'vol-beat-fill','vol-beat-v',function(v){CFG.vol_beat=v;});
   ss('vol-sub',CFG.vol_sub,'vol-sub-fill','vol-sub-v',function(v){CFG.vol_sub=v;});
-  ss('bg-vol',CFG.vol_bg,'bg-vol-fill','bg-vol-v',function(v){CFG.vol_bg=v;if(state.bg_gain)state.bg_gain.gain.value=v/100*0.3;});
+  ss('bg-vol',CFG.vol_bg,'bg-vol-fill','bg-vol-v',function(v){CFG.vol_bg=v;if(state.bg_gain)state.bg_gain.gain.value=v/100*0.3*(state.ambient_listening?state.ambient_vol_mult:1);});
   
   $('vol-preview-accent').addEventListener('click',function(){
     init_audio();play_click(true,false);
@@ -2321,6 +2481,9 @@ function init_ambient(){
   var settings=$('ambient-settings');
   var level=$('ambient-level');
   var fill=$('ambient-fill');
+  
+  state.ambient_sensitivity=CFG.ambient_sensitivity;
+  state.ambient_base_volume=CFG.ambient_base_volume;
   
   function updateLevel(v){
     level.textContent=v.toFixed(1)+' dB';
@@ -2363,8 +2526,8 @@ function init_ambient(){
         var sens=state.ambient_sensitivity/50;
         var adjustment=(normalized-30)*sens*0.5;
         var targetVol=Math.min(100,Math.max(20,state.ambient_base_volume+adjustment));
-        var masterGain=ctx.createGain();
-        masterGain.gain.value=targetVol/100;
+        state.ambient_vol_mult=targetVol/100;
+        if(state.bg_gain)state.bg_gain.gain.value=CFG.vol_bg/100*0.3*state.ambient_vol_mult;
         
         state.ambient_animation=requestAnimationFrame(measure);
       }
@@ -2376,10 +2539,12 @@ function init_ambient(){
   
   function stopListening(){
     state.ambient_listening=false;
+    state.ambient_vol_mult=1;
     if(state.ambient_animation)cancelAnimationFrame(state.ambient_animation);
     if(state.ambient_microphone){try{state.ambient_microphone.disconnect();}catch(e){}}
     if(state.ambient_stream){state.ambient_stream.getTracks().forEach(function(t){t.stop();});}
     state.ambient_stream=null;state.ambient_microphone=null;state.ambient_analyser=null;
+    if(state.bg_gain)state.bg_gain.gain.value=CFG.vol_bg/100*0.3;
     btn.classList.remove('active');btn.querySelector('span').textContent='🎤 开启麦克风检测';
     settings.style.display='none';
     level.textContent='-- dB';fill.style.width='0%';
@@ -2392,13 +2557,13 @@ function init_ambient(){
   var sensIn=$('ambient-sens'),sensFill=$('ambient-sens-fill'),sensVal=$('ambient-sens-v');
   sensIn.value=state.ambient_sensitivity;sensFill.style.width=state.ambient_sensitivity+'%';sensVal.textContent=state.ambient_sensitivity;
   sensIn.addEventListener('input',function(){
-    var v=parseInt(this.value);sensFill.style.width=v+'%';sensVal.textContent=v;state.ambient_sensitivity=v;
+    var v=parseInt(this.value);sensFill.style.width=v+'%';sensVal.textContent=v;state.ambient_sensitivity=v;CFG.ambient_sensitivity=v;save_cfg_debounced();
   });
   
   var baseIn=$('ambient-base'),baseFill=$('ambient-base-fill'),baseVal=$('ambient-base-v');
   baseIn.value=state.ambient_base_volume;baseFill.style.width=state.ambient_base_volume+'%';baseVal.textContent=state.ambient_base_volume;
   baseIn.addEventListener('input',function(){
-    var v=parseInt(this.value);baseFill.style.width=v+'%';baseVal.textContent=v;state.ambient_base_volume=v;
+    var v=parseInt(this.value);baseFill.style.width=v+'%';baseVal.textContent=v;state.ambient_base_volume=v;CFG.ambient_base_volume=v;save_cfg_debounced();
   });
 }
 
@@ -2487,11 +2652,20 @@ function init_practice(){
   });
   $('pr-stop').addEventListener('click',stop_practice);
   qsa('[data-rand]').forEach(function(b){
+    b.classList.toggle('on',state.rand_active&&b.dataset.rand===CFG.rand_mode);
     b.addEventListener('click',function(){
-      CFG.rand_mode=b.dataset.rand;qsa('[data-rand]').forEach(function(x){x.classList.remove('on');});b.classList.add('on');save_cfg();
+      if(state.rand_active&&CFG.rand_mode===b.dataset.rand){stop_random();return;}
+      CFG.rand_mode=b.dataset.rand;save_cfg();
+      if(!state.playing){
+        qsa('[data-rand]').forEach(function(x){x.classList.remove('on');});
+        b.classList.add('on');
+        toast('已选择模式，开始播放后生效');return;
+      }
+      start_random();
     });
   });
   qsa('[data-ramp]').forEach(function(b){
+    b.classList.toggle('on',b.dataset.ramp===CFG.ramp_mode);
     b.addEventListener('click',function(){
       CFG.ramp_mode=b.dataset.ramp;qsa('[data-ramp]').forEach(function(x){x.classList.remove('on');});b.classList.add('on');save_cfg();
     });
@@ -2501,9 +2675,15 @@ function init_practice(){
   $('ramp-start').addEventListener('change',function(){CFG.ramp_start=parseInt(this.value);save_cfg();});
   $('ramp-end').addEventListener('change',function(){CFG.ramp_end=parseInt(this.value);save_cfg();});
   $('ramp-time').addEventListener('input',function(){
-    CFG.ramp_time=parseInt(this.value);$('ramp-time-fill').style.width=CFG.ramp_time/30*100+'%';$('ramp-time-v').textContent=CFG.ramp_time+'分';save_cfg();
+    CFG.ramp_time=parseInt(this.value);$('ramp-time-fill').style.width=CFG.ramp_time/30*100+'%';$('ramp-time-v').textContent=CFG.ramp_time+'分';save_cfg_debounced();
   });
   $('ramp-start-btn').addEventListener('click',start_ramp);
+  var rsBtn=$('btn-reset-stats');
+  if(rsBtn)rsBtn.addEventListener('click',function(){
+    if(confirm('确定要重置练习统计吗？')){
+      state.total_beats=0;state.total_bars=0;state.total_time=0;save_stats();render_stats();toast('统计已重置');
+    }
+  });
 }
 
 function start_practice(id){
@@ -2515,19 +2695,21 @@ function start_practice(id){
   if(id==='gradual')run_gradual();
   else if(id==='interval')run_interval();
   else if(id==='silent')run_silent();
+  else if(id==='accents')run_accents();
 }
 
 function run_gradual(){
-  var st=0;state.practice_timer=setInterval(function(){
-    st++;var nb=CFG.bpm+5;if(nb<=200){update_bpm(nb);$('pr-cd').textContent=nb;}
+  var st=0,base_bpm=CFG.bpm;
+  state.practice_timer=setInterval(function(){
+    st++;var nb=base_bpm+st*5;if(nb<=240){update_bpm(nb);$('pr-cd').textContent=nb;}
     $('pr-bar').style.width=Math.min(100,st/20*100)+'%';
     if(st>=20)stop_practice();
   },8000);
 }
 function run_interval(){
-  var fast=false,st=0;
+  var fast=false,st=0,base_bpm=CFG.bpm;
   state.practice_timer=setInterval(function(){
-    fast=!fast;st++;var base=CFG.bpm,nb=fast?base+30:base-20;nb=clamp(nb,40,240);
+    fast=!fast;st++;var nb=fast?base_bpm+30:base_bpm-20;nb=clamp(nb,40,240);
     update_bpm(nb);$('pr-cd').textContent=nb;$('pr-stage').textContent=fast?'快速段':'慢速段';
     $('pr-bar').style.width=Math.min(100,st/20*100)+'%';
     if(st>=20)stop_practice();
@@ -2537,21 +2719,43 @@ function run_silent(){
   var st=0;
   state.practice_timer=setInterval(function(){
     st++;var sil=st%2===1;
-    $('pr-stage').textContent=sil?'保持节拍...':'播放中';
+    state.silent_muted=sil;
+    $('pr-stage').textContent=sil?'保持节拍... (静音)':'播放中';
+    if(!sil){play_click(true,false);if(CFG.flash)flash_beat(true);}
     $('pr-bar').style.width=Math.min(100,st/16*100)+'%';
-    if(st>=16)stop_practice();
+    if(st>=16){state.silent_muted=false;stop_practice();}
   },4000);
+}
+function run_accents(){
+  var st=0;
+  state.custom_accent=0;
+  state.practice_timer=setInterval(function(){
+    st++;
+    var accent_pos=Math.floor(Math.random()*CFG.ts_beats);
+    state.custom_accent=accent_pos;
+    $('pr-stage').textContent='重音在第 '+(accent_pos+1)+' 拍';
+    $('pr-cd').textContent=accent_pos+1;
+    $('pr-bar').style.width=Math.min(100,st/20*100)+'%';
+    qsa('.beat-dot').forEach(function(d,i){
+      d.dataset.ac=+(i===accent_pos);
+    });
+    if(st>=20){state.custom_accent=-1;stop_practice();}
+  },3000);
 }
 
 function stop_practice(){
   state.practice=null;clearInterval(state.practice_timer);state.practice_timer=null;
+  state.silent_muted=false;state.custom_accent=-1;
   stop();$('practice-list-wrap').style.display='';$('practice-run-wrap').style.display='none';$('pr-bar').style.width='0%';
   render_stats();toast('练习完成！');
 }
 
 function start_ramp(){
   if(state.playing){toast('请先停止播放');return;}
-  start();var sb=CFG.ramp_start,eb=CFG.ramp_end,tm=CFG.ramp_time,ts=tm*60,el=0;
+  var sb=clamp(CFG.ramp_start,20,500),eb=clamp(CFG.ramp_end,20,500);
+  if(CFG.ramp_mode==='up'&&sb>=eb)eb=sb+20;
+  if(CFG.ramp_mode==='down'&&sb<=eb)sb=eb+20;
+  start();var tm=CFG.ramp_time,ts=tm*60,el=0;
   state.ramp_current=sb;update_bpm(sb);
   $('pr-stage').textContent='速度渐变训练';$('pr-cd').textContent=sb;
   $('practice-list-wrap').style.display='none';$('practice-run-wrap').style.display='';
@@ -2563,17 +2767,49 @@ function start_ramp(){
     state.ramp_current=clamp(state.ramp_current,20,500);
     update_bpm(state.ramp_current);$('pr-cd').textContent=state.ramp_current;
     $('pr-bar').style.width=Math.min(100,pct*100)+'%';
-    if(el>=ts){stop_ramp();stop();toast('渐变训练完成！');}
+    if(el>=ts){stop_ramp();$('practice-list-wrap').style.display='';$('practice-run-wrap').style.display='none';$('pr-bar').style.width='0%';stop();toast('渐变训练完成！');}
   },1000);
 }
 function stop_ramp(){clearInterval(state.ramp_timer);state.ramp_timer=null;}
 
+function start_random(){
+  stop_random();
+  if(!state.playing){toast('请先开始播放');return;}
+  state.rand_active=true;
+  state.rand_base_bpm=CFG.bpm;
+  qsa('[data-rand]').forEach(function(b){b.classList.toggle('on',b.dataset.rand===CFG.rand_mode);});
+  var base_bpm=CFG.bpm;
+  state.rand_timer=setInterval(function(){
+    if(!state.playing){stop_random();return;}
+    var nb=base_bpm;
+    if(CFG.rand_mode==='mild')nb=base_bpm+Math.round((Math.random()-0.5)*base_bpm*0.2);
+    else if(CFG.rand_mode==='medium')nb=base_bpm+Math.round((Math.random()-0.5)*base_bpm*0.5);
+    else if(CFG.rand_mode==='strong')nb=base_bpm+Math.round((Math.random()-0.5)*base_bpm*1.0);
+    else if(CFG.rand_mode==='extreme')nb=Math.round(40+Math.random()*200);
+    nb=clamp(nb,20,500);
+    update_bpm(nb);render_presets();render_favs();
+  },2000);
+  toast('已开启随机节拍 ('+CFG.rand_mode+')');
+}
+function stop_random(){
+  if(state.rand_timer){clearInterval(state.rand_timer);state.rand_timer=null;}
+  state.rand_active=false;
+  qsa('[data-rand]').forEach(function(b){b.classList.remove('on');});
+  if(state.rand_base_bpm){update_bpm(state.rand_base_bpm);render_presets();render_favs();state.rand_base_bpm=0;}
+}
+
 function init_tuner(){
   var canvas=$('tuner-canvas'),ctx=canvas.getContext('2d'),t=0;
+  var cached_pc='',last_theme='';
   function resize(){canvas.width=canvas.offsetWidth;canvas.height=canvas.offsetHeight;}
   resize();window.addEventListener('resize',resize);
   function dw(){
     requestAnimationFrame(dw);
+    var tp=$('pg-tuner');
+    if(!tp||!tp.classList.contains('active'))return;
+    if(canvas.width===0||canvas.height===0)resize();
+    var cur_theme=CFG.theme;
+    if(!cached_pc||cur_theme!==last_theme){var cs=getComputedStyle(document.body);cached_pc=cs.getPropertyValue('--primary').trim();last_theme=cur_theme;}
     ctx.clearRect(0,0,canvas.width,canvas.height);ctx.beginPath();
     for(var x=0;x<canvas.width;x++){
       var y=canvas.height/2,phase=(x/canvas.width)*Math.PI*2*2+t,val=0;
@@ -2584,28 +2820,27 @@ function init_tuner(){
       y+=val*canvas.height*0.35;
       if(x===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);
     }
-    var cs=getComputedStyle(document.body),pc=cs.getPropertyValue('--primary').trim();
-    ctx.strokeStyle=pc;ctx.lineWidth=2;ctx.stroke();t+=0.05;
+    ctx.strokeStyle=cached_pc;ctx.lineWidth=2;ctx.stroke();t+=0.05;
   }
   dw();
   $('tuner-play').addEventListener('click',start_tuner);
   $('tuner-down').addEventListener('click',function(){
     CFG.tuner_freq=Math.max(100,CFG.tuner_freq-1);update_tuner_disp();save_cfg();
-    if(state.tuner_osc)state.tuner_osc.frequency.value=CFG.tuner_freq;
+    if(state.tuner_osc)state.tuner_osc.frequency.setValueAtTime(CFG.tuner_freq,state.audio_ctx.currentTime);
   });
   $('tuner-up').addEventListener('click',function(){
     CFG.tuner_freq=Math.min(2000,CFG.tuner_freq+1);update_tuner_disp();save_cfg();
-    if(state.tuner_osc)state.tuner_osc.frequency.value=CFG.tuner_freq;
+    if(state.tuner_osc)state.tuner_osc.frequency.setValueAtTime(CFG.tuner_freq,state.audio_ctx.currentTime);
   });
   qsa('[data-note]').forEach(function(b){
     b.addEventListener('click',function(){
-      qsa('[data-note]').forEach(function(x){x.classList.remove('on');});b.classList.add('on');
-      CFG.tuner_freq=parseFloat(b.dataset.freq);$('tuner-note').textContent=b.dataset.note;
+      CFG.tuner_freq=parseFloat(b.dataset.freq);
       update_tuner_disp();save_cfg();
-      if(state.tuner_osc)state.tuner_osc.frequency.value=CFG.tuner_freq;
+      if(state.tuner_osc)state.tuner_osc.frequency.setValueAtTime(CFG.tuner_freq,state.audio_ctx.currentTime);
     });
   });
   qsa('[data-twave]').forEach(function(b){
+    b.classList.toggle('on',b.dataset.twave===CFG.tuner_wave);
     b.addEventListener('click',function(){
       qsa('[data-twave]').forEach(function(x){x.classList.remove('on');});b.classList.add('on');
       CFG.tuner_wave=b.dataset.twave;save_cfg();
@@ -2613,7 +2848,21 @@ function init_tuner(){
     });
   });
 }
-function update_tuner_disp(){$('tuner-freq').textContent=CFG.tuner_freq.toFixed(2)+' Hz';}
+function update_tuner_disp(){
+  $('tuner-freq').textContent=CFG.tuner_freq.toFixed(2)+' Hz';
+  var note=freq_to_note(CFG.tuner_freq);
+  $('tuner-note').textContent=note;
+  qsa('[data-note]').forEach(function(b){
+    b.classList.toggle('on',Math.abs(parseFloat(b.dataset.freq)-CFG.tuner_freq)<0.5);
+  });
+}
+function freq_to_note(freq){
+  var notes=['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+  var n=Math.round(12*Math.log2(freq/440)+69);
+  var octave=Math.floor(n/12)-1;
+  var idx=((n%12)+12)%12;
+  return notes[idx]+octave;
+}
 
 function start_tuner(){
   if(!state.audio_ctx)init_audio();
@@ -2621,15 +2870,18 @@ function start_tuner(){
   var ctx=state.audio_ctx,osc=ctx.createOscillator(),gain=ctx.createGain();
   osc.type=CFG.tuner_wave;osc.frequency.value=CFG.tuner_freq;gain.gain.value=0.3;
   osc.connect(gain);gain.connect(ctx.destination);osc.start();
-  state.tuner_osc=osc;state.tuner_gain=gain;$('tuner-play').textContent='停止';
+  state.tuner_osc=osc;state.tuner_gain=gain;
+  var tp=$('tuner-play'),sp=tp.querySelector('span');if(sp)sp.textContent='停止';
 }
 function stop_tuner(){
   try{if(state.tuner_osc){state.tuner_osc.stop();state.tuner_osc.disconnect();state.tuner_osc=null;}}catch(e){}
-  state.tuner_gain=null;$('tuner-play').textContent='播放 A4';
+  state.tuner_gain=null;
+  var tp=$('tuner-play'),sp=tp.querySelector('span');if(sp)sp.textContent='播放 A4';
 }
 
 function init_custom_sound(){
   qsa('[data-wave]').forEach(function(b){
+    b.classList.toggle('on',b.dataset.wave===CFG.cs_wave);
     b.addEventListener('click',function(){
       qsa('[data-wave]').forEach(function(x){x.classList.remove('on');});b.classList.add('on');
       CFG.cs_wave=b.dataset.wave;save_cfg();
@@ -2639,7 +2891,7 @@ function init_custom_sound(){
     $(id).value=CFG[key];var min=parseInt($(id).min),max=parseInt($(id).max);
     $(fid).style.width=(CFG[key]-min)/(max-min)*100+'%';$(did).textContent=CFG[key];
     $(id).addEventListener('input',function(){
-      var v=parseInt(this.value);$(fid).style.width=(v-min)/(max-min)*100+'%';$(did).textContent=v;CFG[key]=v;save_cfg();
+      var v=parseInt(this.value);$(fid).style.width=(v-min)/(max-min)*100+'%';$(did).textContent=v;CFG[key]=v;save_cfg_debounced();
     });
   }
   sss('cs-accent-freq','cs-af-fill','cs-af-val','cs_accent_freq');
@@ -2655,16 +2907,17 @@ function init_custom_sound(){
 
 function init_bg_sound_ctrl(){
   qsa('[data-bg]').forEach(function(b){
+    b.classList.toggle('on',b.dataset.bg===CFG.bg_sound);
     b.addEventListener('click',function(){
       CFG.bg_sound=b.dataset.bg;qsa('[data-bg]').forEach(function(x){x.classList.remove('on');});b.classList.add('on');
       save_cfg();if(state.playing)init_bg_sound();
     });
   });
-  if(CFG.bg_sound!=='none'){var btn=qs('[data-bg="'+CFG.bg_sound+'"]');if(btn)btn.classList.add('on');}
 }
 
 function init_vis_style(){
   qsa('[data-vis]').forEach(function(b){
+    b.classList.toggle('on',b.dataset.vis===CFG.vis_style);
     b.addEventListener('click',function(){
       qsa('[data-vis]').forEach(function(x){x.classList.remove('on');});b.classList.add('on');
       CFG.vis_style=b.dataset.vis;save_cfg();update_vis_style();
@@ -2673,8 +2926,14 @@ function init_vis_style(){
 }
 function update_vis_style(){
   var beats=$('beats'),sub=$('beat-sub'),pend_wrap=qs('.pendulum-wrap');
-  if(CFG.vis_style==='minimal'){beats.style.opacity='0.3';sub.style.opacity='0.3';pend_wrap.style.display='none';}
-  else{beats.style.opacity='1';sub.style.opacity='1';pend_wrap.style.display='flex';}
+  var specWrap=$('spectrum-wrap');
+  var show_spec=(CFG.vis_style==='bars'||CFG.vis_style==='wave');
+  var show_pend=(CFG.vis_style!=='minimal');
+  if(CFG.vis_style==='minimal'){beats.style.opacity='0.35';sub.style.opacity='0.35';}
+  else{beats.style.opacity='1';sub.style.opacity='1';}
+  if(pend_wrap)pend_wrap.style.display=show_pend?'flex':'none';
+  if(specWrap)specWrap.style.display=show_spec?'flex':'none';
+  if(specWrap)specWrap.style.height=(CFG.vis_style==='bars')?'50px':'36px';
 }
 
 function export_settings(){
@@ -2711,7 +2970,7 @@ function init_data_mgmt(){
         var d=JSON.parse(ev.target.result);
         if(d.cfg){Object.assign(CFG,d.cfg);save_cfg();apply_theme(CFG.theme);apply_dark(CFG.dark);
           render_beats();render_presets();render_favs();render_sigs();render_subs();render_sounds();
-          render_themes();update_bpm(CFG.bpm);}
+          render_theme_preview();render_theme_picker();update_bpm(CFG.bpm);update_vis_style();}
         if(d.stats){state.total_beats=d.stats.beats||0;state.total_bars=d.stats.bars||0;state.total_time=d.stats.time||0;save_stats();}
         if(d.history){state.history=d.history;save_history();render_history();}
         toast('导入成功');
@@ -2736,6 +2995,7 @@ function init_data_mgmt(){
 
 function init_particles(){
   var canvas=$('particle-canvas'),ctx=canvas.getContext('2d'),particles=[];
+  var cached_pc='',last_theme='';
   function resize(){canvas.width=canvas.offsetWidth;canvas.height=canvas.offsetHeight;}
   resize();window.addEventListener('resize',resize);
   function cp(){return{x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:Math.random()*3+1,vx:(Math.random()-0.5)*0.3,vy:(Math.random()-0.5)*0.3,o:Math.random()*0.5+0.2};}
@@ -2743,14 +3003,15 @@ function init_particles(){
   function draw(){
     requestAnimationFrame(draw);
     if(!CFG.particles||!state.particles_on)return;
+    var cur_theme=CFG.theme;
+    if(!cached_pc||cur_theme!==last_theme){var cs=getComputedStyle(document.body);cached_pc=cs.getPropertyValue('--primary').trim();last_theme=cur_theme;}
     ctx.clearRect(0,0,canvas.width,canvas.height);
-    var cs=getComputedStyle(document.body),pc=cs.getPropertyValue('--primary').trim();
     particles.forEach(function(p){
       p.x+=p.vx;p.y+=p.vy;
       if(p.x<0)p.x=canvas.width;if(p.x>canvas.width)p.x=0;
       if(p.y<0)p.y=canvas.height;if(p.y>canvas.height)p.y=0;
       ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-      ctx.fillStyle=pc;ctx.globalAlpha=p.o*(CFG.anim_amt/100);ctx.fill();ctx.globalAlpha=1;
+      ctx.fillStyle=cached_pc;ctx.globalAlpha=p.o*(CFG.anim_amt/100);ctx.fill();ctx.globalAlpha=1;
     });
   }
   draw();
@@ -2762,6 +3023,15 @@ function init_spectrum(){
   function animate(){
     requestAnimationFrame(animate);
     if(!state.playing)return;
+    var hp=$('pg-home');
+    if(!hp||!hp.classList.contains('active')){
+      for(var i=0;i<wrap.children.length;i++)wrap.children[i].style.height='4px';
+      return;
+    }
+    if(CFG.vis_style!=='bars'&&CFG.vis_style!=='wave'){
+      for(var i=0;i<wrap.children.length;i++)wrap.children[i].style.height='4px';
+      return;
+    }
     var bars=wrap.children,sc=get_sub_count(),bp=state.cur_beat+state.cur_sub/sc,bpct=bp/CFG.ts_beats;
     for(var i=0;i<bars.length;i++){var d=Math.abs(i/bars.length-bpct),h=4+Math.max(0,(0.3-d))*100;bars[i].style.height=h+'px';}
   }
@@ -2770,7 +3040,8 @@ function init_spectrum(){
 
 function init_keyboard(){
   document.addEventListener('keydown',function(e){
-    if(e.target.tagName==='INPUT')return;
+    if(e.target.tagName==='INPUT'||e.target.tagName==='SELECT')return;
+    if($('theme-picker-mask').classList.contains('show')||$('menu-mask').classList.contains('show')||$('terms-mask').classList.contains('show')||$('guide-mask').classList.contains('hide')===false)return;
     if(e.code==='Space'){e.preventDefault();toggle_play();}
     else if(e.code==='ArrowUp'){e.preventDefault();update_bpm(CFG.bpm+1);render_presets();render_favs();}
     else if(e.code==='ArrowDown'){e.preventDefault();update_bpm(CFG.bpm-1);render_presets();render_favs();}
@@ -2798,7 +3069,7 @@ function init_guide(){
     {title:'欢迎使用节拍器 Pro',desc:'由AI辅助开发的专业级节拍器，为你提供精准稳定的节奏体验。<br><br>点击下方「下一步」开始了解各项功能。',icon:'🎵',show_themes:false,show_agree:false},
     {title:'🏠 首页 · 节拍控制中心',desc:'这里是节拍器的核心控制区域，你知道这些功能吗？<br><br>❓ <b>BPM速度</b>：上下滑动数字可调整速度（40-240），拖动滑块也行<br>❓ <b>节拍指示器</b>：显示当前拍号，点击可切换2/4、3/4、4/4等常用拍号<br>❓ <b>播放按钮</b>：中间大圆形按钮，点击播放/暂停节拍<br>❓ <b>快捷入口</b>：敲击测速（学习新曲子）、调音器（校准乐器）、练习模式（渐进训练）、计时器（控制时长）<br>❓ <b>速度预设</b>：Largo（慢）、Moderato（中）、Prestissimo（极快）等一键切换',icon:'🏠',show_themes:false,show_agree:false},
     {title:'⚙️ 参数 · 精细调节',desc:'想自定义节拍器的音色和节奏？这些设置你知道吗？<br><br>❓ <b>音色选择</b>：点击声（清脆）、木鱼声（空灵）、鼓声（厚重）、电子音（现代）、金属声（尖锐）、自定义（自己调节频率波形）<br>❓ <b>音量控制</b>：重音拍（第一拍大声）、普通拍、细分拍可以分别调节，试听按钮可以预览效果<br>❓ <b>时间签名</b>：2-12拍可选，细分节奏型包括八分音符、三连音、四连音等<br>❓ <b>倒计时</b>：开启后播放前会有4拍或8拍倒计时提示，让你准备好',icon:'⚙️',show_themes:false,show_agree:false},
-    {title:'🎨 主题 · 22款外观',desc:'想让你的节拍器更好看？主题功能了解一下！<br><br>❓ <b>如何打开主题</b>：点击右上角「⋮」菜单，选择「主题颜色」<br>❓ <b>主题种类</b>：22种精选配色，包括樱花粉、琥珀橙、翡翠绿、天空蓝、紫色浪漫等<br>❓ <b>特殊主题</b>：彩虹主题会旋转、霓虹主题会发光、极光主题有动态效果<br>❓ <b>深色模式</b>：夜间使用开启深色模式，保护眼睛不疲劳<br>❓ <b>动画强度</b>：可以在设置中调节动画幅度或关闭动画',icon:'🎨',show_themes:true,show_agree:false},
+    {title:'🎨 主题 · 25款外观',desc:'想让你的节拍器更好看？主题功能了解一下！<br><br>❓ <b>如何打开主题</b>：点击右上角「⋮」菜单，选择「主题颜色」<br>❓ <b>主题种类</b>：25种精选配色，包括樱花粉、琥珀橙、翡翠绿、天空蓝、紫色浪漫等<br>❓ <b>特殊主题</b>：彩虹主题会旋转、霓虹主题会发光、极光主题有动态效果<br>❓ <b>深色模式</b>：夜间使用开启深色模式，保护眼睛不疲劳<br>❓ <b>动画强度</b>：可以在设置中调节动画幅度或关闭动画',icon:'🎨',show_themes:true,show_agree:false},
     {title:'🎤 绝技 · 环境音量自动调节',desc:'这个功能是你的秘密武器！<br><br>❓ <b>是什么</b>：根据环境噪音自动调节节拍器音量，嘈杂环境自动变大，安静环境自动变小<br>❓ <b>如何使用</b>：在「设置」页面开启麦克风权限和自动调节开关<br>❓ <b>灵敏度调节</b>：可以根据环境调整反应速度，灵敏度过高会过于敏感<br>❓ <b>基准音量</b>：设置一个基准音量，环境安静时的默认音量大小<br>❓ <b>隐私提示</b>：麦克风只分析音量，不录制不上传任何声音数据',icon:'🎤',show_themes:false,show_agree:false},
     {title:'🎯 其他实用功能',desc:'还有一些贴心功能你知道吗？<br><br>❓ <b>⌨️ 键盘快捷键</b>：空格键播放/暂停，上下方向键慢调1 BPM，左右方向键快调5 BPM，按T/S/P分别跳转对应页面<br>❓ <b>🔗 分享配置</b>：生成包含当前设置的链接，一键分享给朋友<br>❓ <b>📊 练习统计</b>：记录累计节拍数、小节数、总练习时长，激励你坚持练习<br>❓ <b>📜 历史记录</b>：保存最近20条使用记录，方便回顾之前练习的设置<br>❓ <b>💾 数据备份</b>：支持导出JSON文件备份，换手机也不怕丢设置',icon:'🎯',show_themes:false,show_agree:false},
     {title:'📋 开始使用前',desc:'请先阅读并同意用户协议和隐私政策。<br><br>❓ <b>隐私安全</b>：应用完全在本地运行，不会收集或上传任何个人信息<br>❓ <b>麦克风说明</b>：仅用于实时音量分析，不会被录制或上传<br>❓ <b>数据存储</b>：所有设置保存在你的设备本地',icon:'📋',show_themes:false,show_agree:true}
@@ -2904,9 +3175,10 @@ function init(){
   apply_theme(CFG.theme);apply_dark(CFG.dark);
   update_bpm(CFG.bpm);
   render_beats();render_presets();render_favs();render_sigs();render_subs();render_sounds();render_history();
-  init_nav();init_controls();init_toggles();init_volumes();init_tap();init_practice();
+  init_nav();init_controls();init_toggles();init_volumes();init_tap();init_practice();init_swing();
   init_tuner();init_custom_sound();init_bg_sound_ctrl();init_vis_style();init_data_mgmt();
   init_particles();init_spectrum();init_keyboard();init_share_load();init_timer();init_ambient();init_menu();
+  update_vis_style();update_tuner_disp();
   setTimeout(init_guide,800);
   document.addEventListener('visibilitychange',function(){
     if(document.hidden&&CFG.wake){set_wake_lock(false);}
