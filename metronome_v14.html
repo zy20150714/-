@@ -1001,6 +1001,22 @@ body.t-neon .practice-bar{
   .practice-cd{font-size:2.6em}
 }
 
+.bpm-card{touch-action:none}
+.bpm-num{touch-action:none}
+.beat-dot{touch-action:manipulation}
+.preset-btn{touch-action:manipulation}
+.quick-item{touch-action:manipulation}
+.sig-btn{touch-action:manipulation}
+.sub-btn{touch-action:manipulation}
+.sound-btn{touch-action:manipulation}
+.data-btn{touch-action:manipulation}
+.nav-item{touch-action:manipulation}
+.theme-btn{touch-action:manipulation}
+.menu-item{touch-action:manipulation}
+
+.page{scrollbar-width:none}
+.page::-webkit-scrollbar{display:none}
+
 .theme-open-btn{display:flex;align-items:center;justify-content:space-between;width:100%;padding:12px;
   background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r-md);cursor:pointer;
   transition:all var(--fast)}
@@ -2029,9 +2045,12 @@ function stop_bg_sound(){
 }
 
 function scheduler(){
-  while(state.next_note<state.audio_ctx.currentTime+state.schedule_ahead){
-    schedule_note(state.next_note);next_note();
-  }
+  if(!state.audio_ctx||!state.playing)return;
+  try{
+    while(state.next_note<state.audio_ctx.currentTime+state.schedule_ahead){
+      schedule_note(state.next_note);next_note();
+    }
+  }catch(e){}
 }
 
 function schedule_note(time){
@@ -2046,11 +2065,11 @@ function schedule_note(time){
     var vt=is_accent?40:20;
     setTimeout(function(){navigator.vibrate(vt)},(time-state.audio_ctx.currentTime)*1000);
   }
-  if(!CFG.visual&&!muted){
+  if(!muted&&!(CFG.visual&&is_beat)){
     setTimeout(function(){play_click(is_accent,!is_beat)},(time-state.audio_ctx.currentTime)*1000);
   }
   setTimeout(function(){
-    if(do_flash&&!muted)flash_beat(is_accent);
+    if(do_flash)flash_beat(is_accent);
     if(is_beat)update_beat_disp();
     if(sc>1&&CFG.flash)update_sub_disp();
   },(time-state.audio_ctx.currentTime)*1000);
@@ -2083,13 +2102,23 @@ function flash_beat(is_accent){
     pend.style.transform='rotate('+angle+'deg)';
     state.pendulum_dir=!state.pendulum_dir;
   }
+  if(CFG.visual&&state.playing){
+    var specBars=qsa('.spec-bar');
+    specBars.forEach(function(b,idx){
+      var h=8+Math.random()*28;
+      b.style.height=h+'px';
+    });
+  }
 }
 
 function update_beat_disp(){
   var dots=qsa('.beat-dot');
   dots.forEach(function(d,i){
     d.dataset.ac=+(i===state.cur_beat);
-    if(i===state.cur_beat){d.classList.add('bt');setTimeout(function(){d.classList.remove('bt')},260);}
+    if(i===state.cur_beat){
+      d.classList.remove('bt');void d.offsetWidth;d.classList.add('bt');
+      setTimeout(function(){d.classList.remove('bt');},260);
+    }
   });
 }
 function update_sub_disp(){
@@ -2264,6 +2293,12 @@ function start(){
   $('play-ic').innerHTML='<rect x="6" y="5" width="4" height="14"/><rect x="14" y="5" width="4" height="14"/>';
   if(CFG.wake)set_wake_lock(true);
   $('stat-mini').style.display='grid';
+  update_stats_mini();
+  qsa('.beat-dot').forEach(function(d,i){
+    d.dataset.ac=+(i===0);
+    d.classList.remove('bt');
+  });
+  qsa('.beat-sub-dot').forEach(function(d){d.classList.remove('on');});
   add_history(CFG.bpm,CFG.ts_beats,CFG.ts_value,CFG.subdivision,CFG.sound);
   if(CFG.countdown>0){
     state.countdown=CFG.countdown;state.countdown_beats=0;
@@ -2318,11 +2353,16 @@ function stop(){
   $('play-ic').innerHTML='<polygon points="5 3 19 12 5 21 5 3"/>';
   $('play-label').textContent='点击开始';
   set_wake_lock(false);stop_bg_sound();stop_ramp();stop_random();
-  qsa('.beat-dot').forEach(function(d,i){d.dataset.ac=+(i===0);});
+  qsa('.beat-dot').forEach(function(d,i){
+    d.dataset.ac=+(i===0);
+    d.classList.remove('bt');
+  });
   qsa('.beat-sub-dot').forEach(function(d){d.classList.remove('on');});
   var pend=$('pendulum');
   if(pend){pend.style.transition='transform .3s ease';pend.style.transform='rotate(0deg)';}
   state.pendulum_dir=0;
+  state.cur_beat=0;state.cur_sub=0;
+  $('stat-mini').style.display='none';
 }
 
 function toggle_play(){if(state.playing)stop();else start();}
@@ -2929,11 +2969,11 @@ function update_vis_style(){
   var specWrap=$('spectrum-wrap');
   var show_spec=(CFG.vis_style==='bars'||CFG.vis_style==='wave');
   var show_pend=(CFG.vis_style!=='minimal');
-  if(CFG.vis_style==='minimal'){beats.style.opacity='0.35';sub.style.opacity='0.35';}
-  else{beats.style.opacity='1';sub.style.opacity='1';}
+  if(beats)beats.style.opacity=(CFG.vis_style==='minimal')?'0.35':'1';
+  if(sub)sub.style.opacity=(CFG.vis_style==='minimal')?'0.35':'1';
   if(pend_wrap)pend_wrap.style.display=show_pend?'flex':'none';
-  if(specWrap)specWrap.style.display=show_spec?'flex':'none';
-  if(specWrap)specWrap.style.height=(CFG.vis_style==='bars')?'50px':'36px';
+  if(specWrap){specWrap.style.display=show_spec?'flex':'none';
+    specWrap.style.height=(CFG.vis_style==='bars')?'50px':'36px';}
 }
 
 function export_settings(){
@@ -3041,7 +3081,8 @@ function init_spectrum(){
 function init_keyboard(){
   document.addEventListener('keydown',function(e){
     if(e.target.tagName==='INPUT'||e.target.tagName==='SELECT')return;
-    if($('theme-picker-mask').classList.contains('show')||$('menu-mask').classList.contains('show')||$('terms-mask').classList.contains('show')||$('guide-mask').classList.contains('hide')===false)return;
+    var tm=$('theme-picker-mask'),mm=$('menu-mask'),trm=$('terms-mask'),gm=$('guide-mask');
+    if((tm&&tm.classList.contains('show'))||(mm&&mm.classList.contains('show'))||(trm&&trm.classList.contains('show'))||(gm&&!gm.classList.contains('hide')))return;
     if(e.code==='Space'){e.preventDefault();toggle_play();}
     else if(e.code==='ArrowUp'){e.preventDefault();update_bpm(CFG.bpm+1);render_presets();render_favs();}
     else if(e.code==='ArrowDown'){e.preventDefault();update_bpm(CFG.bpm-1);render_presets();render_favs();}
@@ -3050,7 +3091,7 @@ function init_keyboard(){
     else if(e.key==='t'||e.key==='T')show_page('pg-tap');
     else if(e.key==='s'||e.key==='S')show_page('pg-params');
     else if(e.key==='p'||e.key==='P')show_page('pg-practice');
-    else if(e.key==='Escape'){var cur=qs('.page.active').id;if(cur!=='pg-home')show_page('pg-home');}
+    else if(e.key==='Escape'){var cur=qs('.page.active');if(cur&&cur.id!=='pg-home')show_page('pg-home');}
   });
 }
 
